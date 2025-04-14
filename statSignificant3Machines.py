@@ -47,4 +47,6 @@ try:
 finally:
     # Close the cursor and connection
     cursor.close()
+    cursor2.close()
+    cursor3.close()
     connection.close()

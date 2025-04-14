@@ -21,16 +21,16 @@ try:
     cursor = connection.cursor(buffered=True)
 
 
-    tvs = f"SELECT TVS_Score FROM results WHERE State = 'Louisiana'"
-    cursor.execute(tvs)
+    ovaTrsut = f"SELECT Overall_Trust FROM results"
+    cursor.execute(ovaTrsut)
 
-    tvs_score = cursor.fetchall()
+    ovaTrsut_score = cursor.fetchall()
 
     # Ergebnisse in ein NumPy-Array konvertieren
-    score = np.array([value[0] for value in tvs_score if value[0] is not None])
+    ova_score = np.array([value[0] for value in ovaTrsut_score if value[0] is not None])
 
     # Normalverteilung prüfen
-    shapiro_wilk_test = stats.shapiro(score)
+    shapiro_wilk_test = stats.shapiro(ova_score)
     print(f"Shapiro-Wilk-Test: Statistik={shapiro_wilk_test.statistic}, p-Wert={shapiro_wilk_test.pvalue}")
 
     # Interpretation
@@ -41,11 +41,11 @@ try:
         print("Die Daten scheinen nicht normalverteilt zu sein (Nullhypothese abgelehnt).")
     
     # Normalverteilung anpassen (Mittelwert und Standardabweichung schätzen)
-    mittelwert = np.mean(score)
-    standardabweichung = np.std(score, ddof=1)  # ddof=1 für Stichprobenstandardabweichung
+    mittelwert = np.mean(ova_score)
+    standardabweichung = np.std(ova_score, ddof=1)  # ddof=1 für Stichprobenstandardabweichung
 
     # K-S-Test durchführen
-    ks_test = stats.kstest(score, 'norm', args=(mittelwert, standardabweichung))
+    ks_test = stats.kstest(ova_score, 'norm', args=(mittelwert, standardabweichung))
     print(f"K-S-Test: Statistik={ks_test.statistic}, p-Wert={ks_test.pvalue}")
 
     # Interpretation
@@ -55,7 +55,7 @@ try:
     else:
         print("Die Daten scheinen nicht normalverteilt zu sein (Nullhypothese abgelehnt) [Kolomogov-Smirnov].")
 
-    anderson_test = stats.anderson(score, dist='norm')
+    anderson_test = stats.anderson(ova_score, dist='norm')
     # Interpretation
     alpha = 0.05
     kritischer_wert = anderson_test.critical_values[2]  # Kritischer Wert für alpha = 0.05
@@ -68,11 +68,11 @@ try:
 
 
     
-    plt.hist(score, bins=30, density=True, alpha=0.6, color='g')
+    plt.hist(ova_score, bins=30, density=True, alpha=0.6, color='g')
 
     # Normale Verteilungskurve zum Vergleich hinzufügen
-    mu, std = np.mean(score), np.std(score)
-    x = np.linspace(min(score), max(score), 100)
+    mu, std = np.mean(ova_score), np.std(ova_score)
+    x = np.linspace(min(ova_score), max(ova_score), 100)
     plt.plot(x, stats.norm.pdf(x, mu, std), 'k', linewidth=2)
 
     plt.title('Histogramm mit Normalverteilungskurve')
@@ -80,7 +80,7 @@ try:
     plt.ylabel('Häufigkeit')
     plt.show()
 
-    sm.qqplot(score, line='s')
+    sm.qqplot(ova_score, line='s')
     plt.title('Q-Q-Diagramm')
     plt.show()
 
@@ -90,4 +90,5 @@ try:
 finally:
     # Close the cursor and connection
     cursor.close()
+    
     connection.close()

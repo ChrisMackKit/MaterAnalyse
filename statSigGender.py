@@ -31,8 +31,8 @@ try:
     scoreMale = np.array([value[0] for value in tvs_scoreMale if value[0] is not None])
     tvs_scoreFemale = cursor2.fetchall()
     scoreFemale = np.array([value[0] for value in tvs_scoreFemale if value[0] is not None])
-    sumMale = scoreMale.sum()
-    sumFemale = scoreFemale.sum()
+    sumMale = scoreMale.sum() / scoreMale.size
+    sumFemale = scoreFemale.sum() / scoreFemale.size
     print('Summe Male:', sumMale, 'Summe Female:', sumFemale)
 
     # Mann-Whitney-U-Test ‘two-sided’, ‘less’, ‘greater’
@@ -65,4 +65,6 @@ try:
 finally:
     # Close the cursor and connection
     cursor.close()
+    cursor2.close()
+    
     connection.close()

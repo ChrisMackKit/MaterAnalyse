@@ -37,6 +37,10 @@ try:
     tvs_scoreInd = cursor3.fetchall()
     scoreInd = np.array([value[0] for value in tvs_scoreInd if value[0] is not None])
 
+    sumDem = scoreDem.sum() / scoreDem.size
+    sumRep = scoreRep.sum() / scoreRep.size
+    sumInd = scoreInd.sum() / scoreInd.size
+    print('Summe Dem:', sumDem, 'Summe Rep:', sumRep, 'Summe Ind:', sumInd)
 
     kruskal_wallis = stats.kruskal(scoreDem, scoreRep, scoreInd)
 
@@ -70,4 +74,7 @@ try:
 finally:
     # Close the cursor and connection
     cursor.close()
+    cursor2.close()
+    cursor3.close()
+    
     connection.close()
