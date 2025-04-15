@@ -44,49 +44,49 @@ try:
 
 
 
-    BMD = f"SELECT Overall_Trust FROM results WHERE State = 'Georgia' OR State = 'California'"
+    BMD = f"SELECT Machine_Score_1 FROM results WHERE State = 'Georgia' OR State = 'California'"
     cursorBMD.execute(BMD)
-    DREw = f"SELECT Overall_Trust FROM results WHERE State = 'Ohio' OR State = 'Nevada'"
+    DREw = f"SELECT Machine_Score_1 FROM results WHERE State = 'Ohio' OR State = 'Nevada'"
     cursorDREw.execute(DREw)
-    DREwo = f"SELECT Overall_Trust FROM results WHERE State = 'Louisiana'"
+    DREwo = f"SELECT Machine_Score_1 FROM results WHERE State = 'Louisiana'"
     cursorDREwo.execute(DREwo)
-    Georgia = f"SELECT Overall_Trust FROM results WHERE State = 'Georgia'"
+    Georgia = f"SELECT Machine_Score_1 FROM results WHERE State = 'Georgia'"
     cursorGeorgia.execute(Georgia) 
-    Ohio = f"SELECT Overall_Trust FROM results WHERE State = 'Ohio'"
+    Ohio = f"SELECT Machine_Score_1 FROM results WHERE State = 'Ohio'"
     cursorOhio.execute(Ohio)
-    California = f"SELECT Overall_Trust FROM results WHERE State = 'California'"
+    California = f"SELECT Machine_Score_1 FROM results WHERE State = 'California'"
     cursorCalifornia.execute(California)
-    Nevada = f"SELECT Overall_Trust FROM results WHERE State = 'Nevada'"
+    Nevada = f"SELECT Machine_Score_1 FROM results WHERE State = 'Nevada'"
     cursorNevada.execute(Nevada)
-    Louisiana = f"SELECT Overall_Trust FROM results WHERE State = 'Louisiana'"
+    Louisiana = f"SELECT Machine_Score_1 FROM results WHERE State = 'Louisiana'"
     cursorLouisiana.execute(Louisiana)
-    Male = f"SELECT Overall_Trust FROM results WHERE Gender = '1'"
+    Male = f"SELECT Machine_Score_1 FROM results WHERE Gender = '1'"
     cursorMale.execute(Male)
-    Female = f"SELECT Overall_Trust FROM results WHERE Gender = '2'"
+    Female = f"SELECT Machine_Score_1 FROM results WHERE Gender = '2'"
     cursorFemale.execute(Female)
-    Democrat = f"SELECT Overall_Trust FROM results WHERE Political_Leaning = '1'"
+    Democrat = f"SELECT Machine_Score_1 FROM results WHERE Political_Leaning = '1'"
     cursorDemocrat.execute(Democrat)
-    Republican = f"SELECT Overall_Trust FROM results WHERE Political_Leaning = '2'"
+    Republican = f"SELECT Machine_Score_1 FROM results WHERE Political_Leaning = '2'"
     cursorRepublican.execute(Republican)
-    Independent = f"SELECT Overall_Trust FROM results WHERE Political_Leaning = '3'"
+    Independent = f"SELECT Machine_Score_1 FROM results WHERE Political_Leaning = '3'"
     cursorIndependent.execute(Independent)
-    Swing = f"SELECT Overall_Trust FROM results WHERE State = 'Georgia' OR State = 'Nevada'"
+    Swing = f"SELECT Machine_Score_1 FROM results WHERE State = 'Georgia' OR State = 'Nevada'"
     cursorSwing.execute(Swing)
-    NoSwing = f"SELECT Overall_Trust FROM results WHERE State = 'California' OR State = 'Ohio' OR State = 'Louisiana'"
+    NoSwing = f"SELECT Machine_Score_1 FROM results WHERE State = 'California' OR State = 'Ohio' OR State = 'Louisiana'"
     cursorNoSwing.execute(NoSwing)
-    age18 = f"SELECT Overall_Trust FROM results WHERE Age = '1'"
+    age18 = f"SELECT Machine_Score_1 FROM results WHERE Age = '1'"
     cursor18.execute(age18)
-    age30 = f"SELECT Overall_Trust FROM results WHERE Age = '2'"
+    age30 = f"SELECT Machine_Score_1 FROM results WHERE Age = '2'"
     cursor30.execute(age30)
-    age40 = f"SELECT Overall_Trust FROM results WHERE Age = '3'"
+    age40 = f"SELECT Machine_Score_1 FROM results WHERE Age = '3'"
     cursor40.execute(age40)
-    age50 = f"SELECT Overall_Trust FROM results WHERE Age = '4'"
+    age50 = f"SELECT Machine_Score_1 FROM results WHERE Age = '4'"
     cursor50.execute(age50)
-    age60 = f"SELECT Overall_Trust FROM results WHERE Age = '5'"
+    age60 = f"SELECT Machine_Score_1 FROM results WHERE Age = '5'"
     cursor60.execute(age60)
-    age70 = f"SELECT Overall_Trust FROM results WHERE Age = '6'"
+    age70 = f"SELECT Machine_Score_1 FROM results WHERE Age = '6'"
     cursor70.execute(age70)
-    age80 = f"SELECT Overall_Trust FROM results WHERE Age = '7'"
+    age80 = f"SELECT Machine_Score_1 FROM results WHERE Age = '7'"
     cursor80.execute(age80)
 
 
@@ -213,6 +213,66 @@ try:
     print('Mann-Whitney-U rep v ind statistic greater:', mann_whitneyGreater3.statistic, 'P-value:', mann_whitneyGreater3.pvalue)
     print('Mann-Whitney-U rep v ind statistic less:', mann_whitneyLess3.statistic, 'P-value:', mann_whitneyLess3.pvalue)
 
+
+    # Mann-Whitney-U-Test ‘two-sided’, ‘less’, ‘greater’ for every state
+    mann_whitneyGeorgia = stats.mannwhitneyu(overall_Trust_Georgia, overall_Trust_Ohio, alternative='two-sided')
+    mann_whitneyGreaterGeorgia = stats.mannwhitneyu(overall_Trust_Georgia, overall_Trust_Ohio, alternative='greater')
+    mann_whitneyLessGeorgia = stats.mannwhitneyu(overall_Trust_Georgia, overall_Trust_Ohio, alternative='less')
+
+    mann_whitneyCalifornia = stats.mannwhitneyu(overall_Trust_California, overall_Trust_Nevada, alternative='two-sided')
+    mann_whitneyGreaterCalifornia = stats.mannwhitneyu(overall_Trust_California, overall_Trust_Nevada, alternative='greater')
+    mann_whitneyLessCalifornia = stats.mannwhitneyu(overall_Trust_California, overall_Trust_Nevada, alternative='less')
+
+    mann_whitneyOhio = stats.mannwhitneyu(overall_Trust_Ohio, overall_Trust_Louisiana, alternative='two-sided')
+    mann_whitneyGreaterOhio = stats.mannwhitneyu(overall_Trust_Ohio, overall_Trust_Louisiana, alternative='greater')
+    mann_whitneyLessOhio = stats.mannwhitneyu(overall_Trust_Ohio, overall_Trust_Louisiana, alternative='less')
+
+    mann_whitneyNevada = stats.mannwhitneyu(overall_Trust_Nevada, overall_Trust_Louisiana, alternative='two-sided')
+    mann_whitneyGreaterNevada = stats.mannwhitneyu(overall_Trust_Nevada, overall_Trust_Louisiana, alternative='greater')
+    mann_whitneyLessNevada = stats.mannwhitneyu(overall_Trust_Nevada, overall_Trust_Louisiana, alternative='less')
+
+    mann_whitneyLouisiana = stats.mannwhitneyu(overall_Trust_Louisiana, overall_Trust_Georgia, alternative='two-sided')
+    mann_whitneyGreaterLouisiana = stats.mannwhitneyu(overall_Trust_Louisiana, overall_Trust_Georgia, alternative='greater')
+    mann_whitneyLessLouisiana = stats.mannwhitneyu(overall_Trust_Louisiana, overall_Trust_Georgia, alternative='less')
+
+    mann_whitneyNevadaGeorgia = stats.mannwhitneyu(overall_Trust_Georgia, overall_Trust_Nevada, alternative='two-sided')
+    mann_whitneyGreaterNevadaGeorgia = stats.mannwhitneyu(overall_Trust_Georgia, overall_Trust_Nevada, alternative='greater')
+    mann_whitneyLessNevadaGeorgia = stats.mannwhitneyu(overall_Trust_Georgia, overall_Trust_Nevada, alternative='less')
+
+    mann_whitneyCaliforniaLouisiana = stats.mannwhitneyu(overall_Trust_California, overall_Trust_Louisiana, alternative='two-sided')
+    mann_whitneyGreaterCaliforniaLouisiana = stats.mannwhitneyu(overall_Trust_California, overall_Trust_Louisiana, alternative='greater')
+    mann_whitneyLessCaliforniaLouisiana = stats.mannwhitneyu(overall_Trust_California, overall_Trust_Louisiana, alternative='less')
+
+    mann_whitneyOhioCalifornia = stats.mannwhitneyu(overall_Trust_Ohio, overall_Trust_California, alternative='two-sided')
+    mann_whitneyGreaterOhioCalifornia = stats.mannwhitneyu(overall_Trust_Ohio, overall_Trust_California, alternative='greater')
+    mann_whitneyLessOhioCalifornia = stats.mannwhitneyu(overall_Trust_Ohio, overall_Trust_California, alternative='less')
+
+    print('Mann-Whitney-U Georgia v Ohio statistic:', mann_whitneyGeorgia.statistic, 'P-value:', mann_whitneyGeorgia.pvalue)
+    print('Mann-Whitney-U Georgia v Ohio statistic greater:', mann_whitneyGreaterGeorgia.statistic, 'P-value:', mann_whitneyGreaterGeorgia.pvalue)
+    print('Mann-Whitney-U Georgia v Ohio statistic less:', mann_whitneyLessGeorgia.statistic, 'P-value:', mann_whitneyLessGeorgia.pvalue)
+    print('Mann-Whitney-U California v Nevada statistic:', mann_whitneyCalifornia.statistic, 'P-value:', mann_whitneyCalifornia.pvalue)
+    print('Mann-Whitney-U California v Nevada statistic greater:', mann_whitneyGreaterCalifornia.statistic, 'P-value:', mann_whitneyGreaterCalifornia.pvalue)
+    print('Mann-Whitney-U California v Nevada statistic less:', mann_whitneyLessCalifornia.statistic, 'P-value:', mann_whitneyLessCalifornia.pvalue)
+    print('Mann-Whitney-U Ohio v Louisiana statistic:', mann_whitneyOhio.statistic, 'P-value:', mann_whitneyOhio.pvalue)
+    print('Mann-Whitney-U Ohio v Louisiana statistic greater:', mann_whitneyGreaterOhio.statistic, 'P-value:', mann_whitneyGreaterOhio.pvalue)
+    print('Mann-Whitney-U Ohio v Louisiana statistic less:', mann_whitneyLessOhio.statistic, 'P-value:', mann_whitneyLessOhio.pvalue)
+    print('Mann-Whitney-U Nevada v Louisiana statistic:', mann_whitneyNevada.statistic, 'P-value:', mann_whitneyNevada.pvalue)
+    print('Mann-Whitney-U Nevada v Louisiana statistic greater:', mann_whitneyGreaterNevada.statistic, 'P-value:', mann_whitneyGreaterNevada.pvalue)
+    print('Mann-Whitney-U Nevada v Louisiana statistic less:', mann_whitneyLessNevada.statistic, 'P-value:', mann_whitneyLessNevada.pvalue)
+    print('Mann-Whitney-U Louisiana v Georgia statistic:', mann_whitneyLouisiana.statistic, 'P-value:', mann_whitneyLouisiana.pvalue)
+    print('Mann-Whitney-U Louisiana v Georgia statistic greater:', mann_whitneyGreaterLouisiana.statistic, 'P-value:', mann_whitneyGreaterLouisiana.pvalue)
+    print('Mann-Whitney-U Louisiana v Georgia statistic less:', mann_whitneyLessLouisiana.statistic, 'P-value:', mann_whitneyLessLouisiana.pvalue)
+    print('Mann-Whitney-U Nevada v Georgia statistic:', mann_whitneyNevadaGeorgia.statistic, 'P-value:', mann_whitneyNevadaGeorgia.pvalue)
+    print('Mann-Whitney-U Nevada v Georgia statistic greater:', mann_whitneyGreaterNevadaGeorgia.statistic, 'P-value:', mann_whitneyGreaterNevadaGeorgia.pvalue)
+    print('Mann-Whitney-U Nevada v Georgia statistic less:', mann_whitneyLessNevadaGeorgia.statistic, 'P-value:', mann_whitneyLessNevadaGeorgia.pvalue)
+    print('Mann-Whitney-U California v Louisiana statistic:', mann_whitneyCaliforniaLouisiana.statistic, 'P-value:', mann_whitneyCaliforniaLouisiana.pvalue)
+    print('Mann-Whitney-U California v Louisiana statistic greater:', mann_whitneyGreaterCaliforniaLouisiana.statistic, 'P-value:', mann_whitneyGreaterCaliforniaLouisiana.pvalue)
+    print('Mann-Whitney-U California v Louisiana statistic less:', mann_whitneyLessCaliforniaLouisiana.statistic, 'P-value:', mann_whitneyLessCaliforniaLouisiana.pvalue)
+    print('Mann-Whitney-U Ohio v California statistic:', mann_whitneyOhioCalifornia.statistic, 'P-value:', mann_whitneyOhioCalifornia.pvalue)
+    print('Mann-Whitney-U Ohio v California statistic greater:', mann_whitneyGreaterOhioCalifornia.statistic, 'P-value:', mann_whitneyGreaterOhioCalifornia.pvalue)
+    print('Mann-Whitney-U Ohio v California statistic less:', mann_whitneyLessOhioCalifornia.statistic, 'P-value:', mann_whitneyLessOhioCalifornia.pvalue)
+    
+    
 finally:
     # Close the cursor and connection
     cursorBMD.close()
