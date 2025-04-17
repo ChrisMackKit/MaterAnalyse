@@ -124,7 +124,7 @@ try:
     #value2_label.pack()
 
     # Feste Fenstergröße einstellen
-    root.geometry("1000x500")  # Breite x Höhe
+    root.geometry("1000x600")  # Breite x Höhe
     root.resizable(False, False)  # Verhindert das Ändern der Fenstergröße
 
     #Textfield
@@ -143,15 +143,29 @@ try:
         sql_input = f"UPDATE results SET codes_open_question = '{codes}' WHERE DB_ID = {allResults2[current_index][2]}"
         cursorC.execute(sql_input)
         connection.commit()
-        
+
+    def save_code_fact():
+        global codes
+        codes = input_field_fact.get()
+        print(f"Saved code: {codes}")  # Optional: Print the saved code for confirmation
+        sql_input = f"UPDATE results SET Factbased_reason = '{codes}' WHERE DB_ID = {allResults2[current_index][2]}"
+        cursorC.execute(sql_input)
+        connection.commit()        
 
     # Create an input field
     input_field = tk.Entry(root, width=50)
     input_field.pack(pady=10)
 
+
     # Create the 'Save' button
     save_button = tk.Button(root, text="Save", command=save_code)
     save_button.pack()
+
+    input_field_fact = tk.Entry(root, width=30)
+    input_field_fact.pack(pady=10)
+
+    save_button_fact = tk.Button(root, text="Save Fact", command=save_code_fact)
+    save_button_fact.pack()
 
     # Initialize the display with the first entry
     update_display()
