@@ -64,11 +64,11 @@ try:
     louisianaResults2 = np.array([(value[0], value[1], value[2]) for value in louisianaResults if value[0] is not None])
     '''
     all = """
-        SELECT Do_you_trust, Open_Question_about_Trust, DB_ID, State from results
+        SELECT Do_you_trust, Open_Question_about_Trust, DB_ID, State, Factbased_reason, codes_open_question from results
         """
     cursorG.execute(all)
     allResults = cursorG.fetchall()
-    allResults2 = np.array([(value[0], value[1], value[2], value[3]) for value in allResults if value[0] is not None])
+    allResults2 = np.array([(value[0], value[1], value[2], value[3], value[4], value[5]) for value in allResults if value[0] is not None])
 
     for i in range(len(allResults2)):
         if allResults2[i][0] == "1":
@@ -89,6 +89,8 @@ try:
             #value2_label.config(text=f"Reason: {georgiaResults2[current_index][1]}")
             value3_label.config(text=f"DB ID: {allResults2[current_index][2]}")
             value4_label.config(text=f"State: {allResults2[current_index][3]}")
+            valueRe1_label.config(text=f"Reason: {allResults2[current_index][4]}")
+            valueRe2_label.config(text=f"Reason: {allResults2[current_index][5]}")
             text_field.delete(1.0, tk.END)  # Clear the text field
             text_field.insert(tk.END, f"{allResults2[current_index][1]}\n")
         else:
@@ -120,8 +122,11 @@ try:
     value4_label = tk.Label(root, text="State: ")
     value4_label.pack()
 
-    #value2_label = tk.Label(root, text="Reason: ")
-    #value2_label.pack()
+    valueRe1_label = tk.Label(root, text="Fact-Reason: ")
+    valueRe1_label.pack()
+
+    valueRe2_label = tk.Label(root, text="Reason: ")
+    valueRe2_label.pack()
 
     # Feste Fenstergröße einstellen
     root.geometry("1000x600")  # Breite x Höhe
