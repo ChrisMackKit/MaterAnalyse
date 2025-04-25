@@ -91,6 +91,9 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
 
     def mann_whitneySNS():
         mann_whitneyBMD = stats.mannwhitneyu(get_state_values_swing(), get_state_values_NoSwing(), alternative='two-sided')
@@ -101,6 +104,9 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
 
     def mann_whitney_Gender():
         mann_whitneyBMD = stats.mannwhitneyu(get_gender('1'), get_gender('2'), alternative='two-sided')
@@ -111,21 +117,24 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
 
     def mann_whitney_PL():
         state1 = input_field_state1.get()
         state2 = input_field_state2.get()
-        if state1 == 'Democrat':
+        if state1 == 'democrat':
             state1 = '1'
-        elif state1 == 'Independent':
+        elif state1 == 'independent':
             state1 = '3'
-        elif state1 == 'Republican':
+        elif state1 == 'republican':
             state1 = '2'
-        if state2 == 'Democrat':
+        if state2 == 'democrat':
             state2 = '1'
-        elif state2 == 'Independent':
+        elif state2 == 'independent':
             state2 = '3'
-        elif state2 == 'Republican':
+        elif state2 == 'republican':
             state2 = '2'
         mann_whitneyBMD = stats.mannwhitneyu(kruskal_get_PL(state1), kruskal_get_PL(state2), alternative='two-sided')
         value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: {mann_whitneyBMD.pvalue}")
@@ -135,6 +144,9 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
 
     def kruskal_PL():
         kruskal_wallis = stats.kruskal(kruskal_get_PL(1), kruskal_get_PL(2), kruskal_get_PL(3))
@@ -144,6 +156,9 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less:")
         value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
         value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
 
     def kruskal_Age():
         kruskal_wallis = stats.kruskal(kruskal_get_Age(1), kruskal_get_Age(2), kruskal_get_Age(3), kruskal_get_Age(4), kruskal_get_Age(5), kruskal_get_Age(6))
@@ -153,6 +168,9 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less:")
         value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
         value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
 
     def kruskal_NS():
         kruskal_wallis = stats.kruskal(get_state_values('California'), get_state_values('Ohio'), get_state_values('Louisiana'))
@@ -162,6 +180,9 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less:")
         value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
         value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
 
     def kruskal_All_States():
         kruskal_wallis = stats.kruskal(get_state_values('Georgia'), get_state_values('California'), get_state_values('Nevada'), get_state_values('Ohio'), get_state_values('Louisiana'))
@@ -171,26 +192,172 @@ try:
         value_label_le.config(text=f"Mann-Whitney-U Less:")
         value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
         value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+
+    def calc_mean():
+        state1 = input_field_state1.get()
+        mean1 = np.mean(get_state_values(state1))
+        value_label_mean.config(text=f"Mean {state1}: {mean1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        cal_median()
+        cal_modus()
+
+    def cal_median():
+        state1 = input_field_state1.get()
+        median1 = np.median(get_state_values(state1))
+        value_label_median.config(text=f"Median {state1}: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    
+    def cal_modus():
+        state1 = input_field_state1.get()
+        modus1 = stats.mode(get_state_values(state1), axis=None, keepdims=False)
+        value_label_modus.config(text=f"Modus {state1}: {modus1.mode}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def calc_mean_gen():
+        state1 = input_field_state1.get()
+        if state1 == 'female':
+            state1_ = '2'
+        elif state1 == 'male':
+            state1_ = '1'
+        elif state1 == 'other':
+            state1_ = '3'
+        mean1 = np.mean(get_gender(state1_))
+        value_label_mean.config(text=f"Mean {state1}: {mean1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        cal_median_gen
+        cal_modus_gen()
+
+    def cal_median_gen():
+        state1 = input_field_state1.get()
+        if state1 == 'female':
+            state1_ = '2'
+        elif state1 == 'male':
+            state1_ = '1'
+        elif state1 == 'other':
+            state1_ = '3'
+        median1 = np.median(get_gender(state1_))
+        value_label_median.config(text=f"Median {state1}: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    
+    def cal_modus_gen():
+        state1 = input_field_state1.get()
+        if state1 == 'female':
+            state1_ = '2'
+        elif state1 == 'male':
+            state1_ = '1'
+        elif state1 == 'other':
+            state1_ = '3'
+        modus1 = stats.mode(get_gender(state1_), axis=None, keepdims=False)
+        value_label_modus.config(text=f"Modus {state1}: {modus1.mode}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def calc_mean_PL():
+        state1 = input_field_state1.get()
+        if state1 == 'democrat':
+            state1_ = '1'
+        elif state1 == 'republican':
+            state1_ = '2'
+        elif state1 == 'independent':
+            state1_ = '3'
+        mean1 = np.mean(get_gender(state1_))
+        value_label_mean.config(text=f"Mean {state1}: {mean1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        cal_modus_PL()
+        cal_median_PL()
+
+    def cal_median_PL():
+        state1 = input_field_state1.get()
+        if state1 == 'democrat':
+            state1_ = '1'
+        elif state1 == 'republican':
+            state1_ = '2'
+        elif state1 == 'independent':
+            state1_ = '3'
+        median1 = np.median(get_gender(state1_))
+        value_label_median.config(text=f"Median {state1}: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    
+    def cal_modus_PL():
+        state1 = input_field_state1.get()
+        if state1 == 'democrat':
+            state1_ = '1'
+        elif state1 == 'republican':
+            state1_ = '2'
+        elif state1 == 'independent':
+            state1_ = '3'
+        modus1 = stats.mode(get_gender(state1_), axis=None, keepdims=False)
+        value_label_modus.config(text=f"Modus {state1}: {modus1.mode}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
 
     # Create the main window
     root = tk.Tk()
     root.title("Stats for Trust in Voting")
 
     # Create labels to display the values
-    value_label_2t = tk.Label(root, text="2-tail: ")
+    value_label_2t = tk.Label(root, text="Mann-Whitney-U 2 Tail: ")
     value_label_2t.pack()
 
-    value_label_gr = tk.Label(root, text="greater: ")
+    value_label_gr = tk.Label(root, text="Mann-Whitney-U Greater: ")
     value_label_gr.pack()
 
-    value_label_le = tk.Label(root, text="less: ")
+    value_label_le = tk.Label(root, text="Mann-Whitney-U Less: ")
     value_label_le.pack()
 
-    value_label_Kr = tk.Label(root, text="Kruskal: ")
+    value_label_Kr = tk.Label(root, text="Kruskal-Wallis: ")
     value_label_Kr.pack()
 
-    value_label_dunn = tk.Label(root, text="Dunn: ")
+    value_label_dunn = tk.Label(root, text="Dunn-Test: ")
     value_label_dunn.pack()
+
+    value_label_mean = tk.Label(root, text="Mean: ")
+    value_label_mean.pack()
+    value_label_median = tk.Label(root, text="Median: ")
+    value_label_median.pack()
+    value_label_modus = tk.Label(root, text="Modus: ")
+    value_label_modus.pack()
 
     # Feste Fenstergröße einstellen
     root.geometry("800x600")  # Breite x Höhe
@@ -198,16 +365,16 @@ try:
     # Create the 'Next' button
     MW_button = tk.Button(root, text="Mann-Whitney States", command=mann_whitney)
     MW_button.pack() 
-    MW_button.place(x=30, y=400)
+    MW_button.place(x=30, y=450)
     MWSNS_button = tk.Button(root, text="Mann-Whitney Swing v NoSwing", command=mann_whitneySNS)
     MWSNS_button.pack()
-    MWSNS_button.place(x=180, y=400)
+    MWSNS_button.place(x=180, y=450)
     MWG_button = tk.Button(root, text="Mann-Whitney Gender", command=mann_whitney_Gender)
     MWG_button.pack() 
-    MWG_button.place(x=380, y=400)
+    MWG_button.place(x=380, y=450)
     MW_PL_button = tk.Button(root, text="Mann-Whitney Political Leaning", command=mann_whitney_PL)
     MW_PL_button.pack()
-    MW_PL_button.place(x=530, y=400)
+    MW_PL_button.place(x=530, y=450)
 
     # Create an input field
     input_field_state1 = tk.Entry(root, width=30)
@@ -228,6 +395,20 @@ try:
     kruskal_All_States_button = tk.Button(root, text="Kruskal-Mann All States", command=kruskal_All_States)
     kruskal_All_States_button.pack()
     kruskal_All_States_button.place(x=580, y=500)
+
+    mean_button = tk.Button(root, text="Mean", command=calc_mean)
+    mean_button.pack()
+    mean_button.place(x=30, y=550)
+
+
+    mean_button_gen = tk.Button(root, text="Mean/Median/Modus Gender", command=calc_mean_gen)
+    mean_button_gen.pack()
+    mean_button_gen.place(x=190, y=550)
+
+
+    mean_button_PL = tk.Button(root, text="Mean/Median/Modus Poli Leaning", command=calc_mean_PL)
+    mean_button_PL.pack()
+    mean_button_PL.place(x=480, y=550)
 
     # Create a variable to store the selected option
     selected_option = tk.StringVar(value="TVS Score")
