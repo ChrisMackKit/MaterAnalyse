@@ -71,11 +71,11 @@ try:
     allResults2 = np.array([(value[0], value[1], value[2], value[3], value[4], value[5]) for value in allResults if value[0] is not None])
 
     for i in range(len(allResults2)):
-        if allResults2[i][0] == "1":
+        if allResults2[i][0] == 1:
             allResults2[i][0] = "Do Trust"
-        elif allResults2[i][0] == "2":
+        elif allResults2[i][0] == 2:
             allResults2[i][0] = "Don't Trust"
-        elif allResults2[i][0] == "3":
+        elif allResults2[i][0] == 3:
             allResults2[i][0] = "Not Sure"
         else:
             allResults2[i][0] = "Unknown"
@@ -85,7 +85,7 @@ try:
     # Function to update the displayed values
     def update_display():
         if 0 <= current_index < len(allResults2):
-            value1_label.config(text=f"{allResults2[current_index][0]}")
+            value1_label.config(text=f"Trust: {allResults2[current_index][0]}")
             #value2_label.config(text=f"Reason: {georgiaResults2[current_index][1]}")
             value3_label.config(text=f"DB ID: {allResults2[current_index][2]}")
             value4_label.config(text=f"State: {allResults2[current_index][3]}")
@@ -107,6 +107,8 @@ try:
         if current_index < len(allResults2) - 3:
             current_index += 3
             update_display()
+            input_field.delete(0, tk.END)
+            input_field_fact.delete(0, tk.END)
 
     # Create the main window
     root = tk.Tk()
