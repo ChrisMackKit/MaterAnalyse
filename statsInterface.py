@@ -78,6 +78,24 @@ try:
         cursor.close()       
         return group1
     
+    def get_BMD():
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE State = 'Georgia' OR State = 'California'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        group1 = np.array([value[0] for value in buff if value[0] is not None]) 
+        cursor.close()       
+        return group1
+    
+    def get_DREw():
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE State = 'Nevada' OR State = 'Ohio'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        group1 = np.array([value[0] for value in buff if value[0] is not None]) 
+        cursor.close()       
+        return group1
+    
 
     # Function to handle the 'Next' button click
     def mann_whitney():
@@ -332,6 +350,58 @@ try:
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
 
+    def cal_mean_S():
+        mean1 = np.mean(get_state_values_swing())
+        modus1 = stats.mode(get_state_values_swing(), axis=None, keepdims=False)
+        median1 = np.median(get_state_values_swing())
+        value_label_mean.config(text=f"Mean Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_mean_NS():
+        mean1 = np.mean(get_state_values_NoSwing())
+        modus1 = stats.mode(get_state_values_NoSwing(), axis=None, keepdims=False)
+        median1 = np.median(get_state_values_NoSwing())
+        value_label_mean.config(text=f"Mean Non Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Non Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_mean_BMD():
+        mean1 = np.mean(get_BMD())
+        modus1 = stats.mode(get_BMD(), axis=None, keepdims=False)
+        median1 = np.median(get_BMD())
+        value_label_mean.config(text=f"Mean Non Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Non Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_mean_DREw():
+        mean1 = np.mean(get_DREw())
+        modus1 = stats.mode(get_DREw(), axis=None, keepdims=False)
+        median1 = np.median(get_DREw())
+        value_label_mean.config(text=f"Mean Non Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Non Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
     # Create the main window
     root = tk.Tk()
     root.title("Stats for Trust in Voting")
@@ -360,21 +430,21 @@ try:
     value_label_modus.pack()
 
     # Feste Fenstergröße einstellen
-    root.geometry("800x600")  # Breite x Höhe
+    root.geometry("800x650")  # Breite x Höhe
 
     # Create the 'Next' button
     MW_button = tk.Button(root, text="Mann-Whitney States", command=mann_whitney)
     MW_button.pack() 
-    MW_button.place(x=30, y=450)
+    MW_button.place(x=30, y=400)
     MWSNS_button = tk.Button(root, text="Mann-Whitney Swing v NoSwing", command=mann_whitneySNS)
     MWSNS_button.pack()
-    MWSNS_button.place(x=180, y=450)
+    MWSNS_button.place(x=180, y=400)
     MWG_button = tk.Button(root, text="Mann-Whitney Gender", command=mann_whitney_Gender)
     MWG_button.pack() 
-    MWG_button.place(x=380, y=450)
+    MWG_button.place(x=380, y=400)
     MW_PL_button = tk.Button(root, text="Mann-Whitney Political Leaning", command=mann_whitney_PL)
     MW_PL_button.pack()
-    MW_PL_button.place(x=530, y=450)
+    MW_PL_button.place(x=530, y=400)
 
     # Create an input field
     input_field_state1 = tk.Entry(root, width=30)
@@ -385,30 +455,46 @@ try:
     # Create the 'Save' button
     kruskalPL_button = tk.Button(root, text="Kruskal-Mann Political Leaning", command=kruskal_PL)
     kruskalPL_button.pack()
-    kruskalPL_button.place(x=30, y=500)
+    kruskalPL_button.place(x=30, y=450)
     kruskalAge_button = tk.Button(root, text="Kruskal-Mann Age", command=kruskal_Age)
     kruskalAge_button.pack()
-    kruskalAge_button.place(x=230, y=500)
+    kruskalAge_button.place(x=230, y=450)
     kruskalNS_button = tk.Button(root, text="Kruskal-Mann No Swing States", command=kruskal_NS)
     kruskalNS_button.pack()
-    kruskalNS_button.place(x=380, y=500)
+    kruskalNS_button.place(x=380, y=450)
     kruskal_All_States_button = tk.Button(root, text="Kruskal-Mann All States", command=kruskal_All_States)
     kruskal_All_States_button.pack()
-    kruskal_All_States_button.place(x=580, y=500)
+    kruskal_All_States_button.place(x=580, y=450)
 
     mean_button = tk.Button(root, text="Mean/Median/Modus", command=calc_mean)
     mean_button.pack()
-    mean_button.place(x=30, y=550)
+    mean_button.place(x=30, y=500)
 
 
     mean_button_gen = tk.Button(root, text="Mean/Median/Modus Gender", command=calc_mean_gen)
     mean_button_gen.pack()
-    mean_button_gen.place(x=190, y=550)
+    mean_button_gen.place(x=230, y=500)
 
 
     mean_button_PL = tk.Button(root, text="Mean/Median/Modus Poli Leaning", command=calc_mean_PL)
     mean_button_PL.pack()
-    mean_button_PL.place(x=480, y=550)
+    mean_button_PL.place(x=430, y=500)
+
+    mean_button_SS = tk.Button(root, text="Mean/Median/Modus Swing State", command=cal_mean_S)
+    mean_button_SS.pack()
+    mean_button_SS.place(x=30, y=550)
+
+    mean_button_NSS = tk.Button(root, text="Mean/Median/Modus No Swing State", command=cal_mean_NS)
+    mean_button_NSS.pack()
+    mean_button_NSS.place(x=230, y=550)
+
+    mean_button_BMD = tk.Button(root, text="Mean/Median/Modus BMD", command=cal_mean_BMD)
+    mean_button_BMD.pack()
+    mean_button_BMD.place(x=30, y=600)
+
+    mean_button_DREw = tk.Button(root, text="Mean/Median/Modus DREw", command=cal_mean_DREw)
+    mean_button_DREw.pack()
+    mean_button_DREw.place(x=230, y=600)
 
     # Create a variable to store the selected option
     selected_option = tk.StringVar(value="TVS Score")
