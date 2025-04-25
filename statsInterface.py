@@ -245,7 +245,7 @@ try:
         value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
-        cal_median_gen
+        cal_median_gen()
         cal_modus_gen()
 
     def cal_median_gen():
@@ -396,7 +396,7 @@ try:
     kruskal_All_States_button.pack()
     kruskal_All_States_button.place(x=580, y=500)
 
-    mean_button = tk.Button(root, text="Mean", command=calc_mean)
+    mean_button = tk.Button(root, text="Mean/Median/Modus", command=calc_mean)
     mean_button.pack()
     mean_button.place(x=30, y=550)
 
