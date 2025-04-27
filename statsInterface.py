@@ -10,6 +10,11 @@ import scikit_posthocs as sp
 
 # Prompt the user for the MySQL password
 password = getpass.getpass("Enter your MySQL password: ")
+group_for_mult_group_test_1 = []
+group_for_mult_group_test_2 = []
+group_for_mult_group_test_3 = []
+group_for_mult_group_test_4 = []
+group_for_mult_group_test_5 = []
 
 # Establish a connection to the MySQL database
 connection = mysql.connector.connect(
@@ -23,10 +28,29 @@ stat_value = 'Machine_Score_1'
 
 try:
 
+
     # Spalte mit berechneten Werten füllen
     def get_state_values(state):
         cursor = connection.cursor(buffered=True)
         query = f"SELECT {stat_value} FROM results WHERE State = '{state}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_state_values_gender(state, gender):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE State = '{state}' AND Gender = '{gender}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_state_values_PL(state, pl):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE State = '{state}' AND Political_Leaning = '{pl}'"
         cursor.execute(query)
         buff = cursor.fetchall()
         array = np.array([value[0] for value in buff if value[0] is not None])
@@ -45,6 +69,78 @@ try:
     def get_state_values_NoSwing():
         cursor = connection.cursor(buffered=True)
         query = f"SELECT {stat_value} FROM results WHERE State = 'Ohio' OR State = 'Louisiana' OR State = 'California'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_Swing_values_gender(gender):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE (State = 'Georgia' OR State = 'Nevada') And Gender = '{gender}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_NoSwing_values_gender(gender):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE (State = 'California' OR State = 'Ohio' OR State = 'Louisiana') And Gender = '{gender}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_Swing_values_PL(pl1):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE State = 'Georgia' OR State = 'Nevada' And Political_Leaning = '{pl1}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_NoSwing_values_PL(pl1):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE (State = 'California' OR State = 'Ohio' OR State = 'Louisiana') And Political_Leaning = '{pl1}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+
+    def get_BMD_values_gender(gender):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE (State = 'Georgia' OR State = 'California') And Gender = '{gender}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_BMD_values_PL(pl1):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE (State = 'California' OR State = 'Georgia') And Political_Leaning = '{pl1}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_DREw_values_gender(gender):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE (State = 'Ohio' OR State = 'Nevada') And Gender = '{gender}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
+    
+    def get_DREw_values_PL(pl1):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE (State = 'Ohio' OR State = 'Nevada') And Political_Leaning = '{pl1}'"
         cursor.execute(query)
         buff = cursor.fetchall()
         array = np.array([value[0] for value in buff if value[0] is not None])
@@ -402,6 +498,175 @@ try:
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
 
+    def cal_mean_standard(group):
+        mean1 = np.mean(group)
+        modus1 = stats.mode(group, axis=None, keepdims=False)
+        median1 = np.median(group)
+        value_label_mean.config(text=f"Mean Non Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Non Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_standard_Logic():
+        field1 = input_field_state1.get()
+        field2 = input_field_state2.get()
+        match field1:
+            case 'swing':
+                if field2 == 'male':
+                    group = get_Swing_values_gender('1')
+                elif field2 == 'female':
+                    group = get_Swing_values_gender('2')
+                elif field2 == 'democrat':
+                    group = get_Swing_values_PL('1')
+                elif field2 == 'independent':
+                    group = get_Swing_values_PL('3')
+                elif field2 == 'republican':
+                    group = get_Swing_values_PL('2')
+                else:
+                    pass
+            case 'noswing':
+                if field2 == 'male':
+                    group = get_NoSwing_values_gender('1')
+                elif field2 == 'female':
+                    group = get_NoSwing_values_gender('2')
+                elif field2 == 'democrat':
+                    group = get_NoSwing_values_PL('1')
+                elif field2 == 'independent':
+                    group = get_NoSwing_values_PL('3')
+                elif field2 == 'republican':
+                    group = get_NoSwing_values_PL('2')
+                else:
+                    pass
+            case 'bmd':
+                if field2 == 'male':
+                    group = get_BMD_values_gender('1')
+                elif field2 == 'female':
+                    group = get_BMD_values_gender('2')
+                elif field2 == 'democrat':
+                    group = get_BMD_values_PL('1')
+                elif field2 == 'independent':
+                    group = get_BMD_values_PL('3')
+                elif field2 == 'republican':
+                    group = get_BMD_values_PL('2')
+                else:
+                    pass
+            case 'drew':
+                if field2 == 'male':
+                    group = get_DREw_values_gender('1')
+                elif field2 == 'female':
+                    group = get_DREw_values_gender('2')
+                elif field2 == 'democrat':
+                    group = get_DREw_values_PL('1')
+                elif field2 == 'independent':
+                    group = get_DREw_values_PL('3')
+                elif field2 == 'republican':
+                    group = get_DREw_values_PL('2')
+                else:
+                    pass
+            case _:
+                if field2 == 'male':
+                    group = get_state_values_gender(field1 ,'1')
+                elif field2 == 'female':
+                    group = get_state_values_gender(field1, '2')
+                elif field2 == 'democrat':
+                    group = get_state_values_PL(field1, '1')
+                elif field2 == 'independent':
+                    group = get_state_values_PL(field1, '3')
+                elif field2 == 'republican':
+                    group = get_state_values_PL(field1, '2')
+                else:
+                    pass
+
+        return group
+        
+    def cal_mean_standard_Logic():
+        group = cal_standard_Logic()
+        field1 = input_field_state1.get()
+        field2 = input_field_state2.get()
+        mean1 = np.mean(group)
+        modus1 = stats.mode(group, axis=None, keepdims=False)
+        median1 = np.median(group)
+        value_label_mean.config(text=f"Mean {field2}, {field1}: {mean1}")
+        value_label_modus.config(text=f"Modus {field2}, {field1}: {modus1.mode}")
+        value_label_median.config(text=f"Median {field2}, {field1}: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_MWU_standard_logic():
+        mann_whitneyBMD = stats.mannwhitneyu(group_for_mult_group_test_1, group_for_mult_group_test_2, alternative='two-sided')
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: {mann_whitneyBMD.pvalue}")
+        mann_whitneyGreaterBMD = stats.mannwhitneyu(group_for_mult_group_test_1, group_for_mult_group_test_2, alternative='greater')
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: {mann_whitneyGreaterBMD.pvalue}")
+        mann_whitneyLessBMD = stats.mannwhitneyu(group_for_mult_group_test_1, group_for_mult_group_test_2, alternative='less')
+        value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+    def set_group1():
+        global group_for_mult_group_test_1
+        group_for_mult_group_test_1 = cal_standard_Logic()
+
+    def set_group2():
+        global group_for_mult_group_test_2
+        group_for_mult_group_test_2 = cal_standard_Logic()
+
+    def set_group3():
+        global group_for_mult_group_test_3
+        group_for_mult_group_test_3 = cal_standard_Logic()
+
+    def set_group4():
+        global group_for_mult_group_test_4
+        group_for_mult_group_test_4 = cal_standard_Logic()
+
+    def set_group5():
+        global group_for_mult_group_test_5
+        group_for_mult_group_test_5 = cal_standard_Logic()
+
+    
+    #d ist array mit den Werten für die Boxplot-Darstellung, also Array von Arrays
+    def draw_boxplot(nu):
+        number = int(nu)
+        if number == 1:
+            d = [group_for_mult_group_test_1]
+        elif number == 2:
+            d = [group_for_mult_group_test_1, group_for_mult_group_test_2]
+        elif number == 3:
+            d = [group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3]
+        elif number == 4:
+            d = [group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4]
+        elif number == 5:
+            d = [group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4, group_for_mult_group_test_5]
+        else:
+            d = [group_for_mult_group_test_1]
+
+        if stat_value == "TVS_Score":
+            label_name = "TVS Score"
+        elif stat_value == "Overall_Trust":
+            label_name = "Overall Trust"
+        elif stat_value == "Machine_Score_1":
+            label_name = "Own Score"
+        else:
+            label_name = ""     
+        
+        labeling_boxes = [f"Group {i+1}" for i in range(number)]
+
+        plt.figure(figsize =(10, 7))
+        plt.boxplot(d, labels = labeling_boxes)
+        plt.ylabel(label_name)
+        plt.title(f"Boxplot of for {label_name}")
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.show()
+
     # Create the main window
     root = tk.Tk()
     root.title("Stats for Trust in Voting")
@@ -430,7 +695,7 @@ try:
     value_label_modus.pack()
 
     # Feste Fenstergröße einstellen
-    root.geometry("800x650")  # Breite x Höhe
+    root.geometry("800x750")  # Breite x Höhe
 
     # Create the 'Next' button
     MW_button = tk.Button(root, text="Mann-Whitney States", command=mann_whitney)
@@ -495,6 +760,38 @@ try:
     mean_button_DREw = tk.Button(root, text="Mean/Median/Modus DREw", command=cal_mean_DREw)
     mean_button_DREw.pack()
     mean_button_DREw.place(x=230, y=600)
+
+    mean_button_subgroup = tk.Button(root, text="Mean/Median/Modus Subgroups", command=cal_mean_standard_Logic)
+    mean_button_subgroup.pack()
+    mean_button_subgroup.place(x=30, y=650)
+
+    set_group1 = tk.Button(root, text="set group 1", command=set_group1)
+    set_group1.pack()
+    set_group1.place(x=230, y=650)
+
+    set_group2 = tk.Button(root, text="set group 2", command=set_group2)
+    set_group2.pack()
+    set_group2.place(x=330, y=650)
+
+    set_group3 = tk.Button(root, text="set group 3", command=set_group3)
+    set_group3.pack()
+    set_group3.place(x=430, y=650)
+
+    set_group4 = tk.Button(root, text="set group 4", command=set_group4)
+    set_group4.pack()
+    set_group4.place(x=530, y=650)
+
+    set_group5 = tk.Button(root, text="set group 5", command=set_group5)
+    set_group5.pack()
+    set_group5.place(x=630, y=650)
+
+    mean_button_set_group2 = tk.Button(root, text="Mann Whitney set groups", command=cal_MWU_standard_logic)
+    mean_button_set_group2.pack()
+    mean_button_set_group2.place(x=230, y=700)
+
+    draw_boxplot_button = tk.Button(root, text="Draw Boxplot Subgroups", command=lambda: draw_boxplot(input_field_state1.get()))
+    draw_boxplot_button.pack()
+    draw_boxplot_button.place(x=30, y=700)
 
     # Create a variable to store the selected option
     selected_option = tk.StringVar(value="TVS Score")
