@@ -514,6 +514,28 @@ try:
     def cal_standard_Logic():
         field1 = input_field_state1.get()
         field2 = input_field_state2.get()
+        if field2 == "":
+            if field1 == 'bmd':
+                group = get_BMD()
+            elif field1 == 'drew':
+                group = get_DREw('2')
+            elif field1 == 'swing':
+                group = get_state_values_swing()
+            elif field1 == 'noswing':
+                group = get_state_values_NoSwing()
+            elif field1 == 'male':
+                group = get_gender('1')
+            elif field1 == 'female':
+                group = get_gender('2')
+            elif field1 == 'democrat':
+                group = kruskal_get_PL('1')
+            elif field1 == 'republican':
+                group = kruskal_get_PL('2')
+            elif field1 == 'independent':
+                group = kruskal_get_PL('3')
+            else:
+                group = get_state_values(field1)
+        
         match field1:
             case 'swing':
                 if field2 == 'male':
@@ -580,7 +602,7 @@ try:
                     group = get_state_values_PL(field1, '2')
                 else:
                     pass
-
+        print("Standard Logic Func: ", group)
         return group
         
     def cal_mean_standard_Logic():
@@ -612,25 +634,19 @@ try:
         value_label_median.config(text=f"Median: ")
         value_label_mean.config(text=f"Mean: ")
 
-    def set_group1():
-        global group_for_mult_group_test_1
-        group_for_mult_group_test_1 = cal_standard_Logic()
-
-    def set_group2():
-        global group_for_mult_group_test_2
-        group_for_mult_group_test_2 = cal_standard_Logic()
-
-    def set_group3():
-        global group_for_mult_group_test_3
-        group_for_mult_group_test_3 = cal_standard_Logic()
-
-    def set_group4():
-        global group_for_mult_group_test_4
-        group_for_mult_group_test_4 = cal_standard_Logic()
-
-    def set_group5():
-        global group_for_mult_group_test_5
-        group_for_mult_group_test_5 = cal_standard_Logic()
+    def set_group(number):
+        global group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4, group_for_mult_group_test_5
+        if number == 1:
+            group_for_mult_group_test_1 = cal_standard_Logic()
+        elif number == 2:
+            group_for_mult_group_test_2 = cal_standard_Logic()
+        elif number == 3:
+            group_for_mult_group_test_3 = cal_standard_Logic()
+        elif number == 4:
+            group_for_mult_group_test_4 = cal_standard_Logic()
+        elif number == 5:
+            group_for_mult_group_test_5 = cal_standard_Logic()
+        print(f"Group: ", group_for_mult_group_test_1)
 
     
     #d ist array mit den Werten für die Boxplot-Darstellung, also Array von Arrays
@@ -659,7 +675,7 @@ try:
             label_name = ""     
         
         labeling_boxes = [f"Group {i+1}" for i in range(number)]
-
+        print(group_for_mult_group_test_1, group_for_mult_group_test_2)
         plt.figure(figsize =(10, 7))
         plt.boxplot(d, labels = labeling_boxes)
         plt.ylabel(label_name)
@@ -765,23 +781,23 @@ try:
     mean_button_subgroup.pack()
     mean_button_subgroup.place(x=30, y=650)
 
-    set_group1 = tk.Button(root, text="set group 1", command=set_group1)
+    set_group1 = tk.Button(root, text="set group 1", command=lambda: set_group(1))
     set_group1.pack()
     set_group1.place(x=230, y=650)
 
-    set_group2 = tk.Button(root, text="set group 2", command=set_group2)
+    set_group2 = tk.Button(root, text="set group 2", command=lambda: set_group(2))
     set_group2.pack()
     set_group2.place(x=330, y=650)
 
-    set_group3 = tk.Button(root, text="set group 3", command=set_group3)
+    set_group3 = tk.Button(root, text="set group 3", command=lambda: set_group(3))
     set_group3.pack()
     set_group3.place(x=430, y=650)
 
-    set_group4 = tk.Button(root, text="set group 4", command=set_group4)
+    set_group4 = tk.Button(root, text="set group 4", command=lambda: set_group(4))
     set_group4.pack()
     set_group4.place(x=530, y=650)
 
-    set_group5 = tk.Button(root, text="set group 5", command=set_group5)
+    set_group5 = tk.Button(root, text="set group 5", command=lambda: set_group(5))
     set_group5.pack()
     set_group5.place(x=630, y=650)
 
