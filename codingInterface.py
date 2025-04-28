@@ -104,8 +104,8 @@ try:
     # Function to handle the 'Next' button click
     def next_entry():
         global current_index
-        if current_index < len(allResults2) - 3:
-            current_index += 3
+        if current_index < len(allResults2) - 1:
+            current_index += 1
             update_display()
             input_field.delete(0, tk.END)
             input_field_fact.delete(0, tk.END)

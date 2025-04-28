@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import tkinter.scrolledtext as scrolledtext
 import scikit_posthocs as sp
+import trust_notrust as tn
 
 # Prompt the user for the MySQL password
 password = getpass.getpass("Enter your MySQL password: ")
@@ -602,7 +603,6 @@ try:
                     group = get_state_values_PL(field1, '2')
                 else:
                     pass
-        print("Standard Logic Func: ", group)
         return group
         
     def cal_mean_standard_Logic():
@@ -646,9 +646,19 @@ try:
             group_for_mult_group_test_4 = cal_standard_Logic()
         elif number == 5:
             group_for_mult_group_test_5 = cal_standard_Logic()
-        print(f"Group: ", group_for_mult_group_test_1)
 
-    
+    def cal_chi_square():
+        chi, pvalue = tn.chi_squared_test(group_for_mult_group_test_1, group_for_mult_group_test_2)
+        
+        value_label_2t.config(text=f"Chi-Square Value: {chi}")
+        value_label_gr.config(text=f"Chi-Square-value: {pvalue}")
+        value_label_le.config(text=f"Mann-Whitney-U Less: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
     #d ist array mit den Werten für die Boxplot-Darstellung, also Array von Arrays
     def draw_boxplot(nu):
         number = int(nu)
@@ -809,6 +819,10 @@ try:
     draw_boxplot_button.pack()
     draw_boxplot_button.place(x=30, y=700)
 
+    chi_square_button = tk.Button(root, text="Chi Square for 2 groups", command=cal_chi_square)
+    chi_square_button.pack()
+    chi_square_button.place(x=430, y=700)
+
     # Create a variable to store the selected option
     selected_option = tk.StringVar(value="TVS Score")
 
@@ -826,6 +840,9 @@ try:
     radio_overall.pack()
 
     radio_own = tk.Radiobutton(root, text="Own Score", variable=selected_option, value="Machine_Score_1", command=update_stat_value)
+    radio_own.pack()
+
+    radio_own = tk.Radiobutton(root, text="Trust / No Trust", variable=selected_option, value="Do_you_trust", command=update_stat_value)
     radio_own.pack()
 
 
