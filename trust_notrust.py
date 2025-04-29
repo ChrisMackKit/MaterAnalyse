@@ -49,3 +49,11 @@ def chi_squared_test(g1, g2):
     print(residuals_df)'''
 
     return chi2, p
+
+
+def trust_percent(g1):
+    perc_trust = (np.sum(g1 == 1) / len(g1)) * 100
+    perc_no_trust = (np.sum(g1 == 2) / len(g1)) * 100
+    perc_not_sure = (np.sum(g1 == 3) / len(g1)) * 100
+    return perc_trust, perc_no_trust, perc_not_sure
+

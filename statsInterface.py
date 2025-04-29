@@ -519,7 +519,7 @@ try:
             if field1 == 'bmd':
                 group = get_BMD()
             elif field1 == 'drew':
-                group = get_DREw('2')
+                group = get_DREw()
             elif field1 == 'swing':
                 group = get_state_values_swing()
             elif field1 == 'noswing':
@@ -651,13 +651,25 @@ try:
         chi, pvalue = tn.chi_squared_test(group_for_mult_group_test_1, group_for_mult_group_test_2)
         
         value_label_2t.config(text=f"Chi-Square Value: {chi}")
-        value_label_gr.config(text=f"Chi-Square-value: {pvalue}")
+        value_label_gr.config(text=f"Chi-Square p-value: {pvalue}")
         value_label_le.config(text=f"Mann-Whitney-U Less: ")
         value_label_Kr.config(text=f"Kruskal-Wallis: ")
         value_label_dunn.config(text=f"Dunn-Test: ")
         value_label_modus.config(text=f"Modus: ")
         value_label_median.config(text=f"Median: ")
         value_label_mean.config(text=f"Mean: ")
+
+    def get_trust_percent():
+        trsut_p, noTrust_p, not_sure_p = tn.trust_percent(group_for_mult_group_test_1)
+        value_label_2t.config(text=f"Trust: {trsut_p}%")
+        value_label_gr.config(text=f"No Trust: {noTrust_p}%")
+        value_label_le.config(text=f"Not Sure: {not_sure_p}%")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
 
     #d ist array mit den Werten für die Boxplot-Darstellung, also Array von Arrays
     def draw_boxplot(nu):
@@ -822,6 +834,10 @@ try:
     chi_square_button = tk.Button(root, text="Chi Square for 2 groups", command=cal_chi_square)
     chi_square_button.pack()
     chi_square_button.place(x=430, y=700)
+
+    trust_percent_button = tk.Button(root, text="Trust Percent", command=get_trust_percent)
+    trust_percent_button.pack()
+    trust_percent_button.place(x=580, y=700)
 
     # Create a variable to store the selected option
     selected_option = tk.StringVar(value="TVS Score")
