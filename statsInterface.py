@@ -8,6 +8,8 @@ import statsmodels.api as sm
 import tkinter.scrolledtext as scrolledtext
 import scikit_posthocs as sp
 import trust_notrust as tn
+import codingFunction as cf
+import drawDiagrams as dd
 
 # Prompt the user for the MySQL password
 password = getpass.getpass("Enter your MySQL password: ")
@@ -659,6 +661,30 @@ try:
         value_label_median.config(text=f"Median: ")
         value_label_mean.config(text=f"Mean: ")
 
+    def cal_chi_square_3():
+        chi, pvalue = tn.chi_squared_test_3(group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3)
+        
+        value_label_2t.config(text=f"Chi-Square Value: {chi}")
+        value_label_gr.config(text=f"Chi-Square p-value: {pvalue}")
+        value_label_le.config(text=f"Mann-Whitney-U Less: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+    def cal_chi_square_5():
+        chi, pvalue = tn.chi_squared_test_5(group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4, group_for_mult_group_test_5)
+        
+        value_label_2t.config(text=f"Chi-Square Value: {chi}")
+        value_label_gr.config(text=f"Chi-Square p-value: {pvalue}")
+        value_label_le.config(text=f"Mann-Whitney-U Less: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
     def get_trust_percent():
         trsut_p, noTrust_p, not_sure_p = tn.trust_percent(group_for_mult_group_test_1)
         value_label_2t.config(text=f"Trust: {trsut_p}%")
@@ -670,6 +696,68 @@ try:
         value_label_median.config(text=f"Median: ")
         value_label_mean.config(text=f"Mean: ")
 
+    def coding_fact_number():
+        listOfFactCodes = group_for_mult_group_test_1
+        fake, election_feeling, machine_feeling, election_fact, machine_fact, misc, rest = cf.fact_coding_count(listOfFactCodes)
+        value_label_2t.config(text=f"machine fact: {machine_fact}")
+        value_label_gr.config(text=f"election fact: {election_fact}")
+        value_label_le.config(text=f"machine feeling: {election_feeling}")
+        value_label_Kr.config(text=f"election feeling: {machine_feeling}")
+        value_label_dunn.config(text=f"fake: {fake}")
+        value_label_modus.config(text=f"")
+        value_label_median.config(text=f"rest: {rest}")
+        value_label_mean.config(text=f"misc: {misc}")
+
+    def coding_fact_number_perc():
+        listOfFactCodes = group_for_mult_group_test_1
+        fake, election_feeling, machine_feeling, election_fact, machine_fact, misc, rest = cf.fact_coding_percent(cf.fact_coding_count(listOfFactCodes)[0], cf.fact_coding_count(listOfFactCodes)[1], cf.fact_coding_count(listOfFactCodes)[2], cf.fact_coding_count(listOfFactCodes)[3], cf.fact_coding_count(listOfFactCodes)[4], cf.fact_coding_count(listOfFactCodes)[5], cf.fact_coding_count(listOfFactCodes)[6])
+        value_label_2t.config(text=f"machine fact: {round(machine_fact,3)}%")
+        value_label_gr.config(text=f"election fact: {round(election_fact,3)}%")
+        value_label_le.config(text=f"machine feeling: {round(election_feeling,3)}%")
+        value_label_Kr.config(text=f"election feeling: {round(machine_feeling,3)}%")
+        value_label_dunn.config(text=f"fake: {round(fake,3)}%")
+        value_label_modus.config(text=f"")
+        value_label_median.config(text=f"rest: {round(rest,3)}%")
+        value_label_mean.config(text=f"misc: {round(misc,3)}%")
+
+    def coding_number():
+        listOfFactCodes = group_for_mult_group_test_1
+        neutral, name, llm, hacking, news, error, tested, usability, secret, government, dominion, verifiable, believe, detection, transparent, rest = cf.coding_count(listOfFactCodes)
+        value_label_2t.config(text=f"neutral: {neutral}, name: {name}, LLM: {llm}")
+        value_label_gr.config(text=f"hacking: {hacking}, news: {news}, error: {error}")
+        value_label_le.config(text=f"tested: {tested}, usability: {usability}, secret: {secret}")
+        value_label_Kr.config(text=f"government: {government}, dominion: {dominion}, verifiable: {verifiable}")
+        value_label_dunn.config(text=f"believe: {believe}, detection: {detection}, transparent: {transparent}")
+        value_label_modus.config(text=f"")
+        value_label_median.config(text=f"rest: {rest}")
+        value_label_mean.config(text=f"")
+
+    def coding_number_perc():
+        listOfFactCodes = group_for_mult_group_test_1
+        neutral, name, llm, hacking, news, error, tested, usability, secret, government, dominion, verifiable, believe, detection, transparent, rest = cf.coding_count_p(cf.coding_count(listOfFactCodes)[0], cf.coding_count(listOfFactCodes)[1], cf.coding_count(listOfFactCodes)[2], cf.coding_count(listOfFactCodes)[3], cf.coding_count(listOfFactCodes)[4], cf.coding_count(listOfFactCodes)[5], cf.coding_count(listOfFactCodes)[6], cf.coding_count(listOfFactCodes)[7], cf.coding_count(listOfFactCodes)[8], cf.coding_count(listOfFactCodes)[9], cf.coding_count(listOfFactCodes)[10], cf.coding_count(listOfFactCodes)[11], cf.coding_count(listOfFactCodes)[12], cf.coding_count(listOfFactCodes)[13], cf.coding_count(listOfFactCodes)[14], cf.coding_count(listOfFactCodes)[15])
+        value_label_2t.config(text=f"neutral: {round(neutral, 3)}%, name: {round(name, 3)}%, LLM: {round(llm, 3)}%")
+        value_label_gr.config(text=f"hacking: {round(hacking, 3)}%, news: {round(news, 3)}%, error: {round(error, 3)}%")
+        value_label_le.config(text=f"tested: {round(tested, 3)}%, usability: {round(usability, 3)}%, secret: {round(secret, 3)}%")
+        value_label_Kr.config(text=f"government: {round(government, 3)}%, dominion: {round(dominion, 3)}%, verifiable: {round(verifiable, 3)}%")
+        value_label_dunn.config(text=f"believe: {round(believe, 3)}%, detection: {round(detection, 3)}%, transparent: {round(transparent, 3)}%")
+        value_label_modus.config(text=f"")
+        value_label_median.config(text=f"rest: {round(rest, 3)}%")
+        value_label_mean.config(text=f"")
+
+    def draw_pie_trust():
+        dd.drawPie_trust(group_for_mult_group_test_1)
+
+    def draw_pie_fact_code():
+        dd.drawPie_fact_code(group_for_mult_group_test_1)
+
+    def draw_bars_2():
+        dd.drawStockBar_trust_2(group_for_mult_group_test_1, group_for_mult_group_test_2)
+    
+    def draw_bars_3():
+        dd.drawStockBar_trust_3(group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3)
+
+    def draw_bars_5():
+        dd.drawStockBar_trust_5(group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4, group_for_mult_group_test_5)
 
     #d ist array mit den Werten für die Boxplot-Darstellung, also Array von Arrays
     def draw_boxplot(nu):
@@ -733,7 +821,7 @@ try:
     value_label_modus.pack()
 
     # Feste Fenstergröße einstellen
-    root.geometry("800x750")  # Breite x Höhe
+    root.geometry("900x700")  # Breite x Höhe
 
     # Create the 'Next' button
     MW_button = tk.Button(root, text="Mann-Whitney States", command=mann_whitney)
@@ -825,19 +913,63 @@ try:
 
     mean_button_set_group2 = tk.Button(root, text="Mann Whitney set groups", command=cal_MWU_standard_logic)
     mean_button_set_group2.pack()
-    mean_button_set_group2.place(x=230, y=700)
+    mean_button_set_group2.place(x=610, y=600)
 
     draw_boxplot_button = tk.Button(root, text="Draw Boxplot Subgroups", command=lambda: draw_boxplot(input_field_state1.get()))
     draw_boxplot_button.pack()
-    draw_boxplot_button.place(x=30, y=700)
+    draw_boxplot_button.place(x=430, y=600)
 
     chi_square_button = tk.Button(root, text="Chi Square for 2 groups", command=cal_chi_square)
     chi_square_button.pack()
-    chi_square_button.place(x=430, y=700)
+    chi_square_button.place(x=30, y=350)
+
+    chi_square_3_button = tk.Button(root, text="Chi Square for 3 groups", command=cal_chi_square_3)
+    chi_square_3_button.pack()
+    chi_square_3_button.place(x=180, y=350)
+
+    chi_square_3_button = tk.Button(root, text="Chi Square for 5 groups", command=cal_chi_square_5)
+    chi_square_3_button.pack()
+    chi_square_3_button.place(x=330, y=350)
 
     trust_percent_button = tk.Button(root, text="Trust Percent", command=get_trust_percent)
     trust_percent_button.pack()
-    trust_percent_button.place(x=580, y=700)
+    trust_percent_button.place(x=480, y=350)
+
+    code_fact_button = tk.Button(root, text="Fact Codes", command=coding_fact_number)
+    code_fact_button.pack()
+    code_fact_button.place(x=600, y=180)
+
+    code_fact_percent_button = tk.Button(root, text="Fact Code %", command=coding_fact_number_perc)
+    code_fact_percent_button.pack()
+    code_fact_percent_button.place(x=600, y=150)
+
+    code__button = tk.Button(root, text="Codes", command=coding_number)
+    code__button.pack()
+    code__button.place(x=600, y=240)
+
+    code_percent_button = tk.Button(root, text="Code %", command=coding_number_perc)
+    code_percent_button.pack()
+    code_percent_button.place(x=600, y=210)
+
+    draw_pie_fact_button = tk.Button(root, text="Draw Pie Chart about Fact Codes", command=draw_pie_fact_code)
+    draw_pie_fact_button.pack()
+    draw_pie_fact_button.place(x=680, y=240)
+
+    draw_pie_trust_percent_button = tk.Button(root, text="Draw Pie Chart about Trust", command=draw_pie_trust)
+    draw_pie_trust_percent_button.pack()
+    draw_pie_trust_percent_button.place(x=680, y=210)
+
+    draw_bar_2_button = tk.Button(root, text="Draw Stackbar about Trust (2)", command=draw_bars_2)
+    draw_bar_2_button.pack()
+    draw_bar_2_button.place(x=680, y=120)
+
+    draw_bar_3_button = tk.Button(root, text="Draw Stackbar about Trust (3)", command=draw_bars_3)
+    draw_bar_3_button.pack()
+    draw_bar_3_button.place(x=680, y=150)
+
+    draw_bar_5_button = tk.Button(root, text="Draw Stackbar about Trust (5)", command=draw_bars_5)
+    draw_bar_5_button.pack()
+    draw_bar_5_button.place(x=680, y=180)
 
     # Create a variable to store the selected option
     selected_option = tk.StringVar(value="TVS Score")
@@ -858,8 +990,56 @@ try:
     radio_own = tk.Radiobutton(root, text="Own Score", variable=selected_option, value="Machine_Score_1", command=update_stat_value)
     radio_own.pack()
 
-    radio_own = tk.Radiobutton(root, text="Trust / No Trust", variable=selected_option, value="Do_you_trust", command=update_stat_value)
-    radio_own.pack()
+    radio_trust = tk.Radiobutton(root, text="Trust / No Trust", variable=selected_option, value="Do_you_trust", command=update_stat_value)
+    radio_trust.pack()
+
+    radio_others = tk.Radiobutton(root, text="Trust in other", variable=selected_option, value="Trust_In_Others", command=update_stat_value)
+    radio_others.pack()
+    radio_others.place(x=30, y=30)
+
+    radio_Tech = tk.Radiobutton(root, text="Trust in Technology", variable=selected_option, value="Trust_Technology", command=update_stat_value)
+    radio_Tech.pack()
+    radio_Tech.place(x=30, y=50)
+
+    radio_Cast = tk.Radiobutton(root, text="Cast Ballot Reflects Intended Selections", variable=selected_option, value="Cast_Ballot", command=update_stat_value)
+    radio_Cast.pack()
+    radio_Cast.place(x=30, y=70)
+
+    radio_Anon = tk.Radiobutton(root, text="Anonymous", variable=selected_option, value="Anonymous", command=update_stat_value)
+    radio_Anon.pack()
+    radio_Anon.place(x=30, y=90)
+
+    radio_trans = tk.Radiobutton(root, text="Transparency", variable=selected_option, value="Transparency", command=update_stat_value)
+    radio_trans.pack()
+    radio_trans.place(x=30, y=110)
+
+    radio_Rel = tk.Radiobutton(root, text="Reliability", variable=selected_option, value="Reliability", command=update_stat_value)
+    radio_Rel.pack()
+    radio_Rel.place(x=30, y=130)
+
+    radio_SysSec = tk.Radiobutton(root, text="System Security", variable=selected_option, value="Sys_Security", command=update_stat_value)
+    radio_SysSec.pack()
+    radio_SysSec.place(x=30, y=150)
+
+    radio_usab = tk.Radiobutton(root, text="Usability", variable=selected_option, value="Usability", command=update_stat_value)
+    radio_usab.pack()
+    radio_usab.place(x=30, y=170)
+
+    radio_acc_count = tk.Radiobutton(root, text="Accuracy Counted", variable=selected_option, value="Accurately_Counted", command=update_stat_value)
+    radio_acc_count.pack()
+    radio_acc_count.place(x=30, y=190)
+
+    radio_accuracy = tk.Radiobutton(root, text="System Accuracy", variable=selected_option, value="Accuracy", command=update_stat_value)
+    radio_accuracy.pack()
+    radio_accuracy.place(x=30, y=210)
+
+    radio_fact_code = tk.Radiobutton(root, text="Fact Codes", variable=selected_option, value="Factbased_reason", command=update_stat_value)
+    radio_fact_code.pack()
+    radio_fact_code.place(x=30, y=230)
+
+    radio_other_fact_code = tk.Radiobutton(root, text="Other Codes", variable=selected_option, value="codes_open_question", command=update_stat_value)
+    radio_other_fact_code.pack()
+    radio_other_fact_code.place(x=30, y=250)
 
 
     # Run the Tkinter event loop

@@ -26,43 +26,7 @@ try:
     cursorO = connection.cursor(buffered=True)
     cursorL = connection.cursor(buffered=True)
 
-    # Spalte mit berechneten Werten füllen
-    '''
-    georgia = """
-        SELECT Do_you_trust, Open_Question_about_Trust, DB_ID from results WHERE State = 'Georgia'
-    """
-    california = """
-        SELECT Do_you_trust, Open_Question_about_Trust, DB_ID from results WHERE State = 'California'
-    """
-    nevada = """
-        SELECT Do_you_trust, Open_Question_about_Trust, DB_ID from results WHERE State = 'Nevada'
-    """
-    ohio = """
-        SELECT Do_you_trust, Open_Question_about_Trust, DB_ID from results WHERE State = 'Ohio'
-    """
-    louisiana = """
-        SELECT Do_you_trust, Open_Question_about_Trust, DB_ID from results WHERE State = 'Louisiana'
-    """
 
-
-    cursorG.execute(georgia)
-    cursorC.execute(california)
-    cursorN.execute(nevada)
-    cursorO.execute(ohio)
-    cursorL.execute(louisiana)
-    georgiaResults = cursorG.fetchall()
-    californiaResults = cursorC.fetchall()
-    nevadaResults = cursorN.fetchall()
-    ohioResults = cursorO.fetchall()
-    louisianaResults = cursorL.fetchall()
-
-
-    georgiaResults2 = np.array([(value[0], value[1], value[2]) for value in georgiaResults if value[0] is not None])
-    californiaResults2 = np.array([(value[0], value[1], value[2]) for value in californiaResults if value[0] is not None])
-    nevadaResults2 = np.array([(value[0], value[1], value[2]) for value in nevadaResults if value[0] is not None])
-    ohioResults2 = np.array([(value[0], value[1], value[2]) for value in ohioResults if value[0] is not None])
-    louisianaResults2 = np.array([(value[0], value[1], value[2]) for value in louisianaResults if value[0] is not None])
-    '''
     all = """
         SELECT Do_you_trust, Open_Question_about_Trust, DB_ID, State, Factbased_reason, codes_open_question from results
         """
@@ -80,7 +44,7 @@ try:
         else:
             allResults2[i][0] = "Unknown"
     # Initialize the index for displaying results
-    current_index = 0
+    current_index = 395
 
     # Function to update the displayed values
     def update_display():
@@ -109,6 +73,14 @@ try:
             update_display()
             input_field.delete(0, tk.END)
             input_field_fact.delete(0, tk.END)
+        
+    def prev_entry():
+        global current_index
+        if current_index > 0:
+            current_index -= 1
+            update_display()
+            input_field.delete(0, tk.END)
+            input_field_fact.delete(0, tk.END)
 
     # Create the main window
     root = tk.Tk()
@@ -132,7 +104,7 @@ try:
 
     # Feste Fenstergröße einstellen
     root.geometry("1000x600")  # Breite x Höhe
-    root.resizable(False, False)  # Verhindert das Ändern der Fenstergröße
+    #root.resizable(False, False)  # Verhindert das Ändern der Fenstergröße
 
     #Textfield
     text_field = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=40, height=10)
@@ -141,6 +113,10 @@ try:
     # Create the 'Next' button
     next_button = tk.Button(root, text="Next", command=next_entry)
     next_button.pack()
+
+    prev_button = tk.Button(root, text="Previous", command=prev_entry)
+    prev_button.pack()
+    prev_button.place(x = 400, y=445)
 
     # Function to handle the 'Save' button click
     def save_code():
