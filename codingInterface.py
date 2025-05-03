@@ -44,7 +44,7 @@ try:
         else:
             allResults2[i][0] = "Unknown"
     # Initialize the index for displaying results
-    current_index = 395
+    current_index = 450
 
     # Function to update the displayed values
     def update_display():

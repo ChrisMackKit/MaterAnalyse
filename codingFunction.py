@@ -77,3 +77,5 @@ def fact_coding_percent(fake, election_feeling, machine_feeling, election_fact, 
     rest_p = (rest / hun_percent)*100
 
     return fake_p, election_feeling_p, machine_feeling_p, election_fact_p, machine_fact_p, misc_p, rest_p
+
+

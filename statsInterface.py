@@ -10,6 +10,7 @@ import scikit_posthocs as sp
 import trust_notrust as tn
 import codingFunction as cf
 import drawDiagrams as dd
+import filterIQR15 as fi
 
 # Prompt the user for the MySQL password
 password = getpass.getpass("Enter your MySQL password: ")
@@ -194,6 +195,8 @@ try:
         group1 = np.array([value[0] for value in buff if value[0] is not None]) 
         cursor.close()       
         return group1
+      
+    
     
 
     # Function to handle the 'Next' button click
@@ -759,6 +762,20 @@ try:
     def draw_bars_5():
         dd.drawStockBar_trust_5(group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4, group_for_mult_group_test_5)
 
+    def filter_data():
+        global group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4, group_for_mult_group_test_5
+        if group_for_mult_group_test_1 != []:
+            group_for_mult_group_test_1 = fi.filter_outliers_iqr(group_for_mult_group_test_1)
+        if group_for_mult_group_test_2 != []:
+            group_for_mult_group_test_2 = fi.filter_outliers_iqr(group_for_mult_group_test_2)
+        if group_for_mult_group_test_3 != []:
+            group_for_mult_group_test_3 = fi.filter_outliers_iqr(group_for_mult_group_test_3)
+        if group_for_mult_group_test_4 != []:
+            group_for_mult_group_test_4 = fi.filter_outliers_iqr(group_for_mult_group_test_4)
+        if group_for_mult_group_test_5 != []:
+            group_for_mult_group_test_5 = fi.filter_outliers_iqr(group_for_mult_group_test_5)
+            
+
     #d ist array mit den Werten für die Boxplot-Darstellung, also Array von Arrays
     def draw_boxplot(nu):
         number = int(nu)
@@ -970,6 +987,10 @@ try:
     draw_bar_5_button = tk.Button(root, text="Draw Stackbar about Trust (5)", command=draw_bars_5)
     draw_bar_5_button.pack()
     draw_bar_5_button.place(x=680, y=180)
+
+    filter_button = tk.Button(root, text="IQR 1,5 Filter", command=filter_data)
+    filter_button.pack()
+    filter_button.place(x=680, y=270)
 
     # Create a variable to store the selected option
     selected_option = tk.StringVar(value="TVS Score")
