@@ -1,7 +1,7 @@
 import numpy as np
 
 def filter_outliers_iqr(data):
-    
+    #print("Original Data:", data, "size: ", len(data))
     q1 = np.percentile(data, 25)
     q3 = np.percentile(data, 75)
     iqr = q3 - q1
@@ -13,5 +13,4 @@ def filter_outliers_iqr(data):
 
     # Filtern der Ausreißer aus den Daten
     filtered_data = data[(data >= lower_bound) & (data <= upper_bound)]
-
-    return filtered_data, outliers
+    return filtered_data

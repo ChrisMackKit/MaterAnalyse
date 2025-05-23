@@ -24,14 +24,13 @@ try:
 
     # Spalte mit berechneten Werten füllen
     sql_update = """
-        ALTER TABLE results
-        ADD Machine_Score_1 FLOAT;
         UPDATE results
-        SET Machine_Score_1 = Overall_Trust + Cast_Ballot + Transparency + Sys_Security + Usability + Accurately_Counted + Accuracy
+        SET Machine_Score_1 = Cast_Ballot + Transparency + Sys_Security + Usability + Accurately_Counted + Accuracy + Anonymous + Reliability
     """
     cursor.execute(sql_update)
     # Änderungen speichern
     connection.commit()
+    
 
 finally:
     # Close the cursor and connection

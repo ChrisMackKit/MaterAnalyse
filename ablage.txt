@@ -1,0 +1,293 @@
+
+    # Function to handle the 'Next' button click
+def mann_whitney():
+        state1 = input_field_state1.get()
+        state2 = input_field_state2.get()
+        mann_whitneyBMD = stats.mannwhitneyu(get_state_values(state1), get_state_values(state2), alternative='two-sided')
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: {mann_whitneyBMD.pvalue}")
+        mann_whitneyGreaterBMD = stats.mannwhitneyu(get_state_values(state1), get_state_values(state2), alternative='greater')
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: {mann_whitneyGreaterBMD.pvalue}")
+        mann_whitneyLessBMD = stats.mannwhitneyu(get_state_values(state1), get_state_values(state2), alternative='less')
+        value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+def mann_whitneySNS():
+        mann_whitneyBMD = stats.mannwhitneyu(get_state_values_swing(), get_state_values_NoSwing(), alternative='two-sided')
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: {mann_whitneyBMD.pvalue}")
+        mann_whitneyGreaterBMD = stats.mannwhitneyu(get_state_values_swing(), get_state_values_NoSwing(), alternative='greater')
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: {mann_whitneyGreaterBMD.pvalue}")
+        mann_whitneyLessBMD = stats.mannwhitneyu(get_state_values_swing(), get_state_values_NoSwing(), alternative='less')
+        value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+def mann_whitney_Gender():
+        mann_whitneyBMD = stats.mannwhitneyu(get_gender('1'), get_gender('2'), alternative='two-sided')
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: {mann_whitneyBMD.pvalue}")
+        mann_whitneyGreaterBMD = stats.mannwhitneyu(get_gender('1'), get_gender('2'), alternative='greater')
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: {mann_whitneyGreaterBMD.pvalue}")
+        mann_whitneyLessBMD = stats.mannwhitneyu(get_gender('1'), get_gender('2'), alternative='less')
+        value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+def mann_whitney_PL():
+        state1 = input_field_state1.get()
+        state2 = input_field_state2.get()
+        if state1 == 'democrat':
+            state1 = '1'
+        elif state1 == 'independent':
+            state1 = '3'
+        elif state1 == 'republican':
+            state1 = '2'
+        if state2 == 'democrat':
+            state2 = '1'
+        elif state2 == 'independent':
+            state2 = '3'
+        elif state2 == 'republican':
+            state2 = '2'
+        mann_whitneyBMD = stats.mannwhitneyu(kruskal_get_PL(state1), kruskal_get_PL(state2), alternative='two-sided')
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: {mann_whitneyBMD.pvalue}")
+        mann_whitneyGreaterBMD = stats.mannwhitneyu(kruskal_get_PL(state1), kruskal_get_PL(state2), alternative='greater')
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: {mann_whitneyGreaterBMD.pvalue}")
+        mann_whitneyLessBMD = stats.mannwhitneyu(kruskal_get_PL(state1), kruskal_get_PL(state2), alternative='less')
+        value_label_le.config(text=f"Mann-Whitney-U Less: {mann_whitneyLessBMD.pvalue}")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+def kruskal_PL():
+        kruskal_wallis = stats.kruskal(kruskal_get_PL(1), kruskal_get_PL(2), kruskal_get_PL(3))
+        value_label_Kr.config(text=f"Kruskal-Wallis: {kruskal_wallis.pvalue}")
+        dunn = sp.posthoc_dunn([kruskal_get_PL(1), kruskal_get_PL(2), kruskal_get_PL(3)], p_adjust='bonferroni')
+        value_label_dunn.config(text=f"Dunn-Test: \n{dunn}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_modus.config(text=f"")
+        value_label_median.config(text=f"")
+        value_label_mean.config(text=f"")    
+
+def kruskal_NS():
+        kruskal_wallis = stats.kruskal(get_state_values('California'), get_state_values('Ohio'), get_state_values('Louisiana'))
+        value_label_Kr.config(text=f"Kruskal-Wallis: {kruskal_wallis.pvalue}")
+        dunn = sp.posthoc_dunn([get_state_values('California'), get_state_values('Ohio'), get_state_values('Louisiana')], p_adjust='bonferroni')
+        value_label_dunn.config(text=f"Dunn-Test: \n{dunn}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+def kruskal_All_States():
+        kruskal_wallis = stats.kruskal(get_state_values('Georgia'), get_state_values('California'), get_state_values('Nevada'), get_state_values('Ohio'), get_state_values('Louisiana'))
+        value_label_Kr.config(text=f"Kruskal-Wallis: {kruskal_wallis.pvalue}")
+        dunn = sp.posthoc_dunn([get_state_values('Georgia'), get_state_values('California'), get_state_values('Nevada'), get_state_values('Ohio'), get_state_values('Louisiana')], p_adjust='bonferroni')
+        value_label_dunn.config(text=f"Dunn-Test: \n{dunn}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_modus.config(text=f"Modus: ")
+        value_label_median.config(text=f"Median: ")
+        value_label_mean.config(text=f"Mean: ")
+
+
+    def calc_mean():
+        state1 = input_field_state1.get()
+        mean1 = np.mean(get_state_values(state1))
+        value_label_mean.config(text=f"Mean {state1}: {mean1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        cal_median()
+        cal_modus()
+
+    def cal_median():
+        state1 = input_field_state1.get()
+        median1 = np.median(get_state_values(state1))
+        value_label_median.config(text=f"Median {state1}: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    
+    def cal_modus():
+        state1 = input_field_state1.get()
+        modus1 = stats.mode(get_state_values(state1), axis=None, keepdims=False)
+        value_label_modus.config(text=f"Modus {state1}: {modus1.mode}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def calc_mean_gen():
+        state1 = input_field_state1.get()
+        if state1 == 'female':
+            state1_ = '2'
+        elif state1 == 'male':
+            state1_ = '1'
+        elif state1 == 'other':
+            state1_ = '3'
+        mean1 = np.mean(get_gender(state1_))
+        value_label_mean.config(text=f"Mean {state1}: {mean1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        cal_median_gen()
+        cal_modus_gen()
+
+    def cal_median_gen():
+        state1 = input_field_state1.get()
+        if state1 == 'female':
+            state1_ = '2'
+        elif state1 == 'male':
+            state1_ = '1'
+        elif state1 == 'other':
+            state1_ = '3'
+        median1 = np.median(get_gender(state1_))
+        value_label_median.config(text=f"Median {state1}: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    
+    def cal_modus_gen():
+        state1 = input_field_state1.get()
+        if state1 == 'female':
+            state1_ = '2'
+        elif state1 == 'male':
+            state1_ = '1'
+        elif state1 == 'other':
+            state1_ = '3'
+        modus1 = stats.mode(get_gender(state1_), axis=None, keepdims=False)
+        value_label_modus.config(text=f"Modus {state1}: {modus1.mode}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def calc_mean_PL():
+        state1 = input_field_state1.get()
+        if state1 == 'democrat':
+            state1_ = '1'
+        elif state1 == 'republican':
+            state1_ = '2'
+        elif state1 == 'independent':
+            state1_ = '3'
+        mean1 = np.mean(get_gender(state1_))
+        value_label_mean.config(text=f"Mean {state1}: {mean1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+        cal_modus_PL()
+        cal_median_PL()
+
+    def cal_median_PL():
+        state1 = input_field_state1.get()
+        if state1 == 'democrat':
+            state1_ = '1'
+        elif state1 == 'republican':
+            state1_ = '2'
+        elif state1 == 'independent':
+            state1_ = '3'
+        median1 = np.median(get_gender(state1_))
+        value_label_median.config(text=f"Median {state1}: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    
+    def cal_modus_PL():
+        state1 = input_field_state1.get()
+        if state1 == 'democrat':
+            state1_ = '1'
+        elif state1 == 'republican':
+            state1_ = '2'
+        elif state1 == 'independent':
+            state1_ = '3'
+        modus1 = stats.mode(get_gender(state1_), axis=None, keepdims=False)
+        value_label_modus.config(text=f"Modus {state1}: {modus1.mode}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_mean_S():
+        mean1 = np.mean(get_state_values_swing())
+        modus1 = stats.mode(get_state_values_swing(), axis=None, keepdims=False)
+        median1 = np.median(get_state_values_swing())
+        value_label_mean.config(text=f"Mean Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_mean_NS():
+        mean1 = np.mean(get_state_values_NoSwing())
+        modus1 = stats.mode(get_state_values_NoSwing(), axis=None, keepdims=False)
+        median1 = np.median(get_state_values_NoSwing())
+        value_label_mean.config(text=f"Mean Non Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Non Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_mean_BMD():
+        mean1 = np.mean(get_BMD())
+        modus1 = stats.mode(get_BMD(), axis=None, keepdims=False)
+        median1 = np.median(get_BMD())
+        value_label_mean.config(text=f"Mean Non Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Non Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")
+
+    def cal_mean_DREw():
+        mean1 = np.mean(get_DREw())
+        modus1 = stats.mode(get_DREw(), axis=None, keepdims=False)
+        median1 = np.median(get_DREw())
+        value_label_mean.config(text=f"Mean Non Swing State: {mean1}")
+        value_label_modus.config(text=f"Modus Non Swing State: {modus1.mode}")
+        value_label_median.config(text=f"Median Swing State: {median1}")
+        value_label_le.config(text=f"Mann-Whitney-U Less:")
+        value_label_gr.config(text=f"Mann-Whitney-U Greater: ")
+        value_label_2t.config(text=f"Mann-Whitney-U 2 Tail: ")
+        value_label_Kr.config(text=f"Kruskal-Wallis: ")
+        value_label_dunn.config(text=f"Dunn-Test: ")

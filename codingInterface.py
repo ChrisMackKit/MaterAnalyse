@@ -33,6 +33,18 @@ try:
     cursorG.execute(all)
     allResults = cursorG.fetchall()
     allResults2 = np.array([(value[0], value[1], value[2], value[3], value[4], value[5]) for value in allResults if value[0] is not None])
+    print(allResults2.shape, ' ', allResults2.dtype)
+    
+    def filter_codes(allResults2):
+        newList = []
+        allResults2 = allResults2.tolist()
+        for i in allResults2:
+            if 'error' in i[5] or 'hacking' in i[5] or 'secret' in i[5] or 'verifiable' in i[5]:
+                newList.append(i)
+        return np.array(newList)
+    
+    allResults2 = filter_codes(allResults2)
+    print(allResults2.shape, ' ', allResults2.dtype)
 
     for i in range(len(allResults2)):
         if allResults2[i][0] == 1:
@@ -44,7 +56,7 @@ try:
         else:
             allResults2[i][0] = "Unknown"
     # Initialize the index for displaying results
-    current_index = 450
+    current_index = 100
 
     # Function to update the displayed values
     def update_display():

@@ -22,9 +22,9 @@ def chi_squared_test(g1, g2):
     # Führe den Chi-Quadrat-Test durch
     chi2, p, dof, expected = chi2_contingency(tabelle)
 
-    print(f"\nChi-Quadrat-Wert: {chi2:.4f}")
-    print(f"p-Wert: {p:.4f}")
-    print(f"Freiheitsgrade: {dof}")
+    #print(f"\nChi-Quadrat-Wert: {chi2:.4f}")
+    #print(f"p-Wert: {p:.4f}")
+    #print(f"Freiheitsgrade: {dof}")
 
 
     return chi2, p
@@ -82,7 +82,10 @@ def chi_squared_test_5(g1, g2, g3, g4, g5):
     return chi2, p
 
 def trust_percent(g1):
+    trust = np.sum(g1 == 1)
+    no_trust = np.sum(g1 == 2)
+    not_sure = np.sum(g1 == 3)
     perc_trust = (np.sum(g1 == 1) / len(g1)) * 100
     perc_no_trust = (np.sum(g1 == 2) / len(g1)) * 100
     perc_not_sure = (np.sum(g1 == 3) / len(g1)) * 100
-    return perc_trust, perc_no_trust, perc_not_sure
+    return perc_trust, perc_no_trust, perc_not_sure, trust, no_trust, not_sure
