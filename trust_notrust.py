@@ -89,3 +89,29 @@ def trust_percent(g1):
     perc_no_trust = (np.sum(g1 == 2) / len(g1)) * 100
     perc_not_sure = (np.sum(g1 == 3) / len(g1)) * 100
     return perc_trust, perc_no_trust, perc_not_sure, trust, no_trust, not_sure
+
+def cramers_v(amount, g1, g2, g3='', bias_correction=False):
+
+    if amount == 2:
+        table = pd.crosstab(
+        index=np.array(['Gruppe1']*len(g1) + ['Gruppe2']*len(g2)),
+        columns=np.array(list(g1) + list(g2))
+    )
+    elif amount == 3:
+        table = pd.crosstab(
+        index=np.array(['Gruppe1']*len(g1) + ['Gruppe2']*len(g2)+ ['Gruppe3']*len(g3)),
+        columns=np.array(list(g1) + list(g2) + list(g3))
+    )
+
+    chi2, _, _, _ = chi2_contingency(table)
+    n = np.sum(table)
+    phi2 = chi2 / n
+    r, k = table.shape
+
+    if bias_correction:
+        phi2_corr = max(0, phi2 - ((k - 1)*(r - 1)) / (n - 1))
+        r_corr = r - ((r - 1)**2) / (n - 1)
+        k_corr = k - ((k - 1)**2) / (n - 1)
+        return np.sqrt(phi2_corr / min((k_corr - 1), (r_corr - 1)))
+    else:
+        return np.sqrt(phi2 / min(k - 1, r - 1))

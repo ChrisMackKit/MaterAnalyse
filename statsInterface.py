@@ -16,6 +16,7 @@ import normalDist as nd
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 from statsmodels.formula.api import ols
 import pandas as pd
+import excelSkript as es
 
 # Prompt the user for the MySQL password
 password = getpass.getpass("Enter your MySQL password: ")
@@ -499,6 +500,36 @@ try:
         value_label_median.config(text=f"rest: {round(rest,3)}%")
         value_label_mean.config(text=f"misc: {round(misc,3)}%")
 
+    def cramers_v(num):
+
+        if num == 2:
+            chi2, pval, v = tn.cramers_v(2, group_for_mult_group_test_1, group_for_mult_group_test_2)
+            print(f"Chi² = {chi2:.2f}, p = {pval:.4f}, Cramér’s V = {v:.4f}")
+            value_label_2t.config(text=f"Cramér's V: {v}")
+            value_label_gr.config(text=f"p-value: {pval}")
+            value_label_Kr.config(text=f"chi2: {chi2}")
+        elif num == 3:
+            chi2, pval, v = tn.cramers_v(3, group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3)
+            print(f"Chi² = {chi2:.2f}, p = {pval:.4f}, Cramér’s V = {v:.4f}")
+            value_label_2t.config(text=f"Cramér's V: {v}")
+            value_label_gr.config(text=f"p-value: {pval}")
+            value_label_Kr.config(text=f"chi2: {chi2}")
+
+    def r_value_dunn():
+        r_value = es.r_value_dunn(group_for_mult_group_test_1, group_for_mult_group_test_2)
+        value_label_2t.config(text=f"R Value: {r_value}")
+        value_label_gr.config(text=f"")
+        value_label_le.config(text=f"")
+        value_label_Kr.config(text=f"")
+        value_label_dunn.config(text=f"")
+        value_label_modus.config(text=f"")
+        value_label_median.config(text=f"")
+        value_label_mean.config(text=f"")
+
+    def r_value_MWU():
+        r_value = es.r_value(group_for_mult_group_test_1, group_for_mult_group_test_2)
+        value_label_2t.config(text=f"R Value: {r_value}")
+
     def coding_number():
         listOfFactCodes = group_for_mult_group_test_1
         neutral, name, llm, hacking_pos, hacking_neg, news, error_pos, error_neg, tested, usability, secret_pos, secret_neg, government, dominion, verifiable_pos, verifiable_neg, believe, detection, transparent, rest = cf.coding_count(listOfFactCodes)
@@ -543,7 +574,10 @@ try:
     def filter_data():
         global group_for_mult_group_test_1, group_for_mult_group_test_2, group_for_mult_group_test_3, group_for_mult_group_test_4, group_for_mult_group_test_5
         if group_for_mult_group_test_1.size != 0:
-            group_for_mult_group_test_1 = fi.filter_outliers_iqr(group_for_mult_group_test_1)
+            #group_for_mult_group_test_1 = fi.filter_outliers_iqr(group_for_mult_group_test_1)
+            print('after filtering:', group_for_mult_group_test_1)
+            print('outliers:', fi.show_outliers_iqr(group_for_mult_group_test_1))
+            print('new outliers:', fi.find_iqr_outliers(group_for_mult_group_test_1))
         if group_for_mult_group_test_2.size != 0:
             group_for_mult_group_test_2 = fi.filter_outliers_iqr(group_for_mult_group_test_2)
         if group_for_mult_group_test_3.size != 0:
@@ -584,7 +618,7 @@ try:
         plt.figure(figsize =(10, 7))
         plt.boxplot(d, labels = labeling_boxes)
         plt.ylabel(label_name)
-        plt.title(f"Boxplot of for {label_name}")
+        plt.title(f"Boxplot for {label_name}")
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.show()
 
@@ -769,6 +803,22 @@ try:
     tukey_butt5 = tk.Button(root, text="Tukey HSD 5", command=lambda: tuekey(5))
     tukey_butt5.pack()
     tukey_butt5.place(x=240, y=500)
+
+    cramersV_button = tk.Button(root, text="Cramér's V 2 groups", command=lambda: cramers_v(2))
+    cramersV_button.pack()
+    cramersV_button.place(x=340, y=500)
+
+    cramersV_button3 = tk.Button(root, text="Cramér's V 3 groups", command=lambda: cramers_v(3))
+    cramersV_button3.pack()
+    cramersV_button3.place(x=480, y=500)
+
+    r_value_dunn_button = tk.Button(root, text="R Value Dunn", command=r_value_dunn)
+    r_value_dunn_button.pack()
+    r_value_dunn_button.place(x=600, y=500)
+
+    r_value_mann_whitney_button = tk.Button(root, text="R Value Mann Whitney", command=r_value_MWU)
+    r_value_mann_whitney_button.pack()
+    r_value_mann_whitney_button.place(x=600, y=540)
 
     normal_distribution_button = tk.Button(root, text="Normal Distribution", command=normal_distribution)
     normal_distribution_button.pack()

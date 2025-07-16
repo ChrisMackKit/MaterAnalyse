@@ -46,7 +46,6 @@ def drawStockBar_trust_5_save(title, valueList, namingList, title_extra = ''):
     y2 = np.array([(np.sum(valueList[0] == 2)/ len(valueList[0]))*100, (np.sum(valueList[1] == 2)/ len(valueList[1]))*100, (np.sum(valueList[2] == 2)/ len(valueList[2])) * 100, (np.sum(valueList[3] == 2)/ len(valueList[3]))*100, (np.sum(valueList[4] == 2)/ len(valueList[4])) * 100])
     y3 = np.array([(np.sum(valueList[0] == 3)/ len(valueList[0]))*100, (np.sum(valueList[1] == 3)/ len(valueList[1]))*100, (np.sum(valueList[2] == 3)/ len(valueList[2])) * 100, (np.sum(valueList[3] == 3)/ len(valueList[3]))*100, (np.sum(valueList[4] == 3)/ len(valueList[4])) * 100])
     fig, ax = plt.subplots(figsize=(5, 6))
-
     colors = ["#973A11", "#FFAE6C", "#DDDAD5"]
     y_values = [y1,y2,y3]
     labels = ["I trust the voting system", "I do not trust the voting system", "I am unsure / undecided"]
@@ -130,7 +129,7 @@ def drawStockBar_fact_code_6_save(title, valueList, namingList, title_extra = ''
         y5 = np.array([valueList[0][4], valueList[1][4], valueList[2][4]])
         y6 = np.array([valueList[0][5], valueList[1][5], valueList[2][5]])
         fig, ax = plt.subplots(figsize=(5, 6))
-    else:
+    elif len(valueList) == 2:
         y1 = np.array([valueList[0][0], valueList[1][0]])
         y2 = np.array([valueList[0][1], valueList[1][1]])
         y3 = np.array([valueList[0][2], valueList[1][2]])
@@ -138,8 +137,15 @@ def drawStockBar_fact_code_6_save(title, valueList, namingList, title_extra = ''
         y5 = np.array([valueList[0][4], valueList[1][4]])
         y6 = np.array([valueList[0][5], valueList[1][5]])
         fig, ax = plt.subplots(figsize=(3, 6))
+    else:
+        y1 = np.array([valueList[0][0]])
+        y2 = np.array([valueList[0][1]])
+        y3 = np.array([valueList[0][2]])
+        y4 = np.array([valueList[0][3]])
+        y5 = np.array([valueList[0][4]])
+        y6 = np.array([valueList[0][5]])
+        fig, ax = plt.subplots(figsize=(2, 6))
 
-    
     colors = ["#973A11", "#FFAE6C", "#DDDAD5", "#8AD8E4", "#1074AF", '#4F7942']
     y_values = [y1,y2,y3,y4,y5,y6]
     labels = ['machine_fact', 'machine_feeling', 'election_fact', 'election_feeling', 'fake', 'misc']
@@ -160,7 +166,7 @@ def drawStockBar_fact_code_6_save(title, valueList, namingList, title_extra = ''
     plt.xlabel("")
     plt.ylabel("Percentage", fontsize=14)
     plt.legend(['machine_fact', 'machine_feeling', 'election_fact', 'election_feeling', 'fake', 'misc'], bbox_to_anchor=(1.05, 1), loc='upper left')
-    plt.title(f'Reason for trust/no trust? {title_extra}')
+    plt.title(f'Coding Open Question - fact vs feeling {title_extra}', fontsize=15)
     ax = plt.gca()
     ax.set_ylim([0,102])
     plt.savefig(f"{path}\\Fact_Code_{title}.png", dpi=300, bbox_inches='tight')
@@ -186,12 +192,18 @@ def drawStockBar_fact_code__save(title, valueList, namingList, title_extra = '')
         y3 = np.array([valueList[0][4], valueList[1][4], valueList[2][4]])
         y4 = np.array([valueList[0][5], valueList[1][5], valueList[2][5]])
         fig, ax = plt.subplots(figsize=(5, 6))
-    else:
+    elif len(valueList) == 2:
         y1 = np.array([valueList[0][0] + valueList[0][2], valueList[1][0] + valueList[1][2]])
         y2 = np.array([valueList[0][1] + valueList[0][3], valueList[1][1] + valueList[1][3]])
         y3 = np.array([valueList[0][4], valueList[1][4]])
         y4 = np.array([valueList[0][5], valueList[1][5]])
         fig, ax = plt.subplots(figsize=(3, 6))
+    else:
+        y1 = np.array([valueList[0][0] + valueList[0][2]])
+        y2 = np.array([valueList[0][1] + valueList[0][3]])
+        y3 = np.array([valueList[0][4]])
+        y4 = np.array([valueList[0][5]])
+        fig, ax = plt.subplots(figsize=(2, 6))
 
     colors = ["#973A11", "#FFAE6C", "#DDDAD5", "#1074AF"]
     y_values = [y1,y2,y3,y4]
@@ -215,7 +227,7 @@ def drawStockBar_fact_code__save(title, valueList, namingList, title_extra = '')
     plt.xlabel("")
     plt.ylabel("Percentage", fontsize=14)
     plt.legend(['fact', 'feeling', 'fake', 'misc'], bbox_to_anchor=(1.05, 1), loc='upper left')
-    plt.title(f'Reason for trust/no trust? {title_extra}')
+    plt.title(f'Coding Open Question - fact vs feeling {title_extra}', fontsize=15)
     ax = plt.gca()
     ax.set_ylim([0,102])
     plt.savefig(f"{path}\\Fact_Code_VS_{title}.png", dpi=300, bbox_inches='tight')
@@ -257,7 +269,7 @@ def drawStockBar_trust_2_save(title, valueList, namingList, title_extra = ''):
     y1 = np.array([(np.sum(valueList[0] == 1)/ len(valueList[0]))*100, (np.sum(valueList[1] == 1)/ len(valueList[1]))*100])
     y2 = np.array([(np.sum(valueList[0] == 2)/ len(valueList[0]))*100, (np.sum(valueList[1] == 2)/ len(valueList[1]))*100])
     y3 = np.array([(np.sum(valueList[0] == 3)/ len(valueList[0]))*100, (np.sum(valueList[1] == 3)/ len(valueList[1]))*100])
-    fig, ax = plt.subplots(figsize=(3, 6))
+    fig, ax = plt.subplots(figsize=(4, 6))
     colors = ["#973A11", "#FFAE6C", "#DDDAD5"]
     y_values = [y1,y2,y3]
     labels = ["I trust the voting system", "I do not trust the voting system", "I am unsure / undecided"]
@@ -345,37 +357,42 @@ def drawStockBar_trust_2(title, valueList, valueList2, namingList, title_extra =
 
 
 
-def draw_boxplot_6(value_list, data_name, score, group_names, folder, field_2='', max=5.2):
+def draw_boxplot_6(value_list, data_name, score, group_names, folder, field_2='', max=5.1, field_3=''):
         path=f'G:\\Meine Ablage\\Masterthese\\Data Visualisierung\\BoxPlots\\{folder}'   
         
         #labeling_boxes = [f"Group {i+1}" for i in range(len(value_list))]
-        plt.figure(figsize =(6, 7))
-        plt.boxplot(value_list, labels = group_names)
+        plt.figure(figsize =(5, 6))
+        plt.boxplot(value_list, labels = group_names, showmeans=True)
         #plt.ylabel(f'{score}', fontsize=14)
         if field_2 == '':
-            plt.title(f"{score}")
-        elif field_2 != '':
-            plt.title(f"{score} ({field_2} only)", fontsize=14)
+            plt.ylabel(f"{score}", fontsize=16)
+        elif field_2 != '' and field_3 == '':
+            plt.ylabel(f"{score} ({field_2} only)", fontsize=16)
+        elif field_3 != '':
+            plt.ylabel(f"{score} ({field_3} {field_2} only)", fontsize=16)
         plt.grid(True, linestyle='--', alpha=0.7)
         ax = plt.gca()
-        ax.set_ylim([0,max])
-        plt.savefig(f"{path}\\plot_{data_name}_{score}_{field_2}_.png", dpi=300, bbox_inches='tight')
+        ax.set_ylim([0.9,max])
+        ax.tick_params(axis='x', labelsize=15)
+        plt.savefig(f"{path}\\plot_{data_name}_{score}_{field_2}_{field_3}.png", dpi=300, bbox_inches='tight')
         plt.close()
 
-def zeichne_balkendiagramm(werte, beschriftungen, title, age =''):
+def zeichne_balkendiagramm(werte, beschriftungen, title, labels, age =''):
     path='G:\\Meine Ablage\\Masterthese\\Data Visualisierung\\Reason_Code_percent'
-    anzahl_balken = len(werte)
+    anzahl_balken = len(werte[0])
     x_positionen = np.arange(anzahl_balken)  # Erzeugt numerische Positionen für die Balken
-    
+    bar_width = 0.4  # Breite der Balken
     #plt.figure(figsize=(10, 6))  # Optional: Legt die Größe des Diagramms fest
-    plt.bar(x_positionen, werte, color='#6495ED', align='center')
-
+    bar1 = plt.bar(x_positionen - bar_width, werte[0], color='#973A11', align='center', width=bar_width, label=labels[0])
+    bar2 = plt.bar(x_positionen, werte[1], color="#FFAE6C", align='center', width=bar_width, label=labels[1])
+    #bar3 = plt.bar(x_positionen + bar_width, werte[2], color="#DDDAD5", align='center', width=bar_width, label=labels[2])
+    plt.legend(loc='upper right', fontsize=8)  # Legende hinzufügen
     # Beschriftung der x-Achse mit den gegebenen Beschriftungen
     plt.xticks(x_positionen, beschriftungen, rotation=90, ha='right')  # Rotation für bessere Lesbarkeit
 
     #plt.xlabel(x_achse)
     plt.ylabel(f"% of participants", fontsize=14)
-    plt.title(f'{title} {age}(Reason Codes in %)')
+    plt.title(f'{title} {age}', fontsize=14)
     plt.tight_layout()  # Sorgt dafür, dass alle Beschriftungen ins Diagramm passen
     ax = plt.gca()
     ax.set_ylim([0,40])

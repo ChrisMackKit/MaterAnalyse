@@ -155,6 +155,16 @@ try:
             query = f"SELECT {stat_value} FROM results WHERE Age = '{age}' AND Political_Leaning = '2'"
         elif second == 'independent':
             query = f"SELECT {stat_value} FROM results WHERE Age = '{age}' AND Political_Leaning = '3'"
+        elif second == 'bmd':
+            query = f"SELECT {stat_value} FROM results WHERE Age = '{age}' AND (State = 'Georgia' OR State = 'California')"
+        elif second == 'drew':
+            query = f"SELECT {stat_value} FROM results WHERE Age = '{age}' AND (State = 'Ohio' OR State = 'Nevada')"
+        elif second == 'swing':
+            query = f"SELECT {stat_value} FROM results WHERE Age = '{age}' AND (State = 'Georgia' OR State = 'Nevada')"
+        elif second == 'noswing':
+            query = f"SELECT {stat_value} FROM results WHERE Age = '{age}' AND (State = 'California' OR State = 'Ohio' OR State = 'Louisiana')"
+        else:
+            query = f"SELECT {stat_value} FROM results WHERE Age = '{age}' AND State = '{second}'"
         cursor.execute(query)
         buff = cursor.fetchall()
         group1 = np.array([value[0] for value in buff if value[0] is not None]) 
@@ -175,6 +185,16 @@ try:
             query = f"SELECT {stat_value} FROM results WHERE (Age = '5' OR Age = '6' OR Age = '7') AND Political_Leaning = '2'"
         elif second == 'independent':
             query = f"SELECT {stat_value} FROM results WHERE (Age = '5' OR Age = '6' OR Age = '7') AND Political_Leaning = '3'"
+        elif second == 'bmd':
+            query = f"SELECT {stat_value} FROM results WHERE (Age = '5' OR Age = '6' OR Age = '7') AND (State = 'Georgia' OR State = 'California')"
+        elif second == 'drew':
+            query = f"SELECT {stat_value} FROM results WHERE (Age = '5' OR Age = '6' OR Age = '7') AND (State = 'Ohio' OR State = 'Nevada')"
+        elif second == 'swing':
+            query = f"SELECT {stat_value} FROM results WHERE (Age = '5' OR Age = '6' OR Age = '7') AND (State = 'Georgia' OR State = 'Nevada')"
+        elif second == 'noswing':
+            query = f"SELECT {stat_value} FROM results WHERE (Age = '5' OR Age = '6' OR Age = '7') AND (State = 'California' OR State = 'Ohio' OR State = 'Louisiana')"
+        else:
+            query = f"SELECT {stat_value} FROM results WHERE (Age = '5' OR Age = '6' OR Age = '7') AND State = '{second}'"
         cursor.execute(query)
         buff = cursor.fetchall()
         group1 = np.array([value[0] for value in buff if value[0] is not None]) 
@@ -193,6 +213,15 @@ try:
     def get_gender_PL(gender, PL):
         cursor = connection.cursor(buffered=True)
         query = f"SELECT {stat_value} FROM results WHERE Gender = '{gender}' AND Political_Leaning = '{PL}'"
+        cursor.execute(query)
+        buffer = cursor.fetchall()
+        array = np.array([value[0] for value in buffer if value[0] is not None])
+        cursor.close()
+        return array
+
+    def get_3_var_list(gender, pl, state):
+        cursor = connection.cursor(buffered=True)
+        query = f"SELECT {stat_value} FROM results WHERE Gender = '{gender}' AND Political_Leaning = '{pl}' AND State = '{state}'"
         cursor.execute(query)
         buffer = cursor.fetchall()
         array = np.array([value[0] for value in buffer if value[0] is not None])
@@ -251,6 +280,15 @@ try:
         kruskal_wallis = stats.kruskal(value1, value2, value3)
         return kruskal_wallis.pvalue
 
+    def get_trusting(trust_value):
+        cursor = connection.cursor(buffered=True)
+        #Factbased_reason
+        query = f"SELECT {stat_value} FROM results WHERE Do_you_trust = '{trust_value}'"
+        cursor.execute(query)
+        buff = cursor.fetchall()
+        array = np.array([value[0] for value in buff if value[0] is not None])
+        cursor.close()
+        return array
 
     def get_all_values():
             cursor = connection.cursor(buffered=True)
@@ -285,6 +323,12 @@ try:
                     group = kruskal_get_PL('2')
                 elif field1 == 'independent':
                     group = kruskal_get_PL('3')
+                elif field1 == 'trust':
+                    group = get_trusting(1)
+                elif field1 == 'notrust':
+                    group = get_trusting(2)
+                elif field1 == 'notsure':
+                    group = get_trusting(3)
                 else:
                     group = get_state_values(field1)
             
@@ -416,6 +460,19 @@ try:
                         pass
             return group
 
+    def cal_standard_logic_3_values(gender, political_leaning, state):
+            if gender == 'male':
+                genderNum = 1
+            elif gender == 'female':
+                genderNum = 2
+            if political_leaning == 'democrat':
+                pl_num = 1
+            elif political_leaning == 'republican':
+                pl_num = 2
+            elif political_leaning == 'independent':
+                pl_num = 3
+            return get_3_var_list(genderNum, pl_num, state)
+
     def normal_dist(values):
         shapiro_wilk_test = stats.shapiro(values)
         mittelwert = np.mean(values)
@@ -485,6 +542,29 @@ try:
 
         r = 1 - (2 * u_korrigiert) / (n1 * n2)
         return r
+
+    def r_value_dunn(group1, group2):
+        group1 = np.asarray(group1)
+        group2 = np.asarray(group2)
+
+        # Kombinierte Daten und Ränge berechnen
+        data = np.concatenate([group1, group2])
+        ranks = stats.rankdata(data)
+
+        n1 = len(group1)
+        n2 = len(group2)
+        N = n1 + n2
+
+        # Mittelwerte der Ränge
+        R1 = np.mean(ranks[:n1])
+        R2 = np.mean(ranks[n1:])
+
+        # Dunn-Z-Wert
+        z = (R1 - R2) / np.sqrt((N * (N + 1)) / 12 * (1/n1 + 1/n2))
+
+        # Effektgröße r
+        r = z / np.sqrt(N)
+        return r
     
     def eta_squared(values):
         if len(values) == 3:
@@ -504,7 +584,6 @@ try:
             sheet = workbook.worksheets[sheet_number]  # Get the active sheet
             
             for i in range(len(cell_letter_list)):
-                print(f'final: {cell_letter_list[i]}, {cell_number}, {value[i]}')
                 cell = cell_letter_list[i] + str(cell_number)
                 sheet[cell] = value[i]
             #for i in range(len(cell_letter_list)):
@@ -549,17 +628,19 @@ try:
     #value_1 = Feld 2 bei Interface
     #value_2 Feld 1 bei Interface für Gruppe 1
     #value_3 Feld 1 bei Interface für Gruppe 2
-    def row_func(columns, sheet_number, start_row, value_1, value_2, value_3, func, score='TVS_Score'):
+    def row_func(columns, sheet_number, start_row, value_1, value_2, func, score='TVS_Score'):
         global stat_value
         stat_value = score
         row_list = columns
-        value_list = [0] * len(row_list)
+        value_list = [0] * 2 *len(row_list)
         #calculate and store 
         start = start_row
+        if value_1 == []:
+            value_1 = ['']
         for i in value_1:
             for j in range(len(value_2)):
                 score_values_group1 = get_list(value_2[j], i)
-                score_values_group2 = get_list(value_3[j], i)
+                #score_values_group2 = get_list(value_3[j], i)
                 #score_values_group3 = get_list(value_4[j], i)
                 #score_values_group4 = get_list(value_5[j], i)
                 #score_values_group5 = get_list(value_6[j], i)
@@ -568,11 +649,13 @@ try:
                 #score_values_group3_IQR = fi.filter_outliers_iqr(score_values_group3)
                 #score_values_group4_IQR = fi.filter_outliers_iqr(score_values_group4)
                 #score_values_group5_IQR = fi.filter_outliers_iqr(score_values_group5)
-                value_list[0], x = func(score_values_group1, score_values_group2)#, score_values_group2]), score_values_group3, score_values_group4, score_values_group5])
-                print(f'x: {x}')
+                print('p-values:', func(score_values_group1))
+                value_list[0], value_list[1] = func(score_values_group1)
                 #value_list[0] = func(score_values_group1_IQR)#, score_values_group2_IQR])#, score_values_group3_IQR, score_values_group4_IQR, score_values_group5_IQR])
-                column_func([x], row_list, sheet_number, start)
-                start += 1
+                column_func([value_list[0]], row_list, sheet_number, start)
+                column_func([value_list[1]], row_list, sheet_number, start+1)
+                print('values:', value_list[0], value_list[1])
+                start += 2
 
     def cal_trust(valueList):
         trust = np.sum(valueList == 1)
@@ -614,6 +697,26 @@ try:
         value_list = []
         for i in groups:
             value_list.append(cal_standard_logic(i, second_field))
+        return value_list
+    
+    def list_of_values_3_vals(groups, second_field, third_field, score):
+        global stat_value
+        stat_value = score
+        value_list = []
+        for i in groups:
+            value_list.append(cal_standard_logic_3_values(second_field, third_field, i))
+        return value_list
+    
+    def list_of_values_by_age_group(groups, second_field, score):
+        global stat_value
+        stat_value = score
+        value_list = []
+        if second_field == '5':
+            for i in groups:
+                value_list.append(get_Age_60(i))
+        else:
+            for i in groups:
+                value_list.append(get_Age(second_field, i))
         return value_list
 
     def list_of_values_codes(groups, second_field, score):
@@ -670,18 +773,22 @@ try:
     # fact_or_reason: 0 wenn fact und 1 wenn reason coding
     # second_field: falls es zweites Argument gibt für Gruppe
     # age: wenn age Gruppen vergleich: 1
-    def draw_histo_coding(listOfTitles, categories, fact_or_reason, second_field='', age=0):
+    # labels: label für Gruppen die verglichen werden
+    def draw_histo_coding(listOfTitles, categories, fact_or_reason, labels, second_field='', age=0):
         #todo
         #Sonderfall Age abdecken
         if age == 0:
             if fact_or_reason == 0:
                 beschrift = ['fake', 'election_feeling', 'machine_feeling', 'election_fact', 'machine_fact', 'misc']
                 values = list_of_values_codes(categories, second_field, 'Factbased_reason')
+                for i in range(len(values)):
+                    dd.zeichne_balkendiagramm(values[i], beschrift, listOfTitles[i], labels)
             else:
-                beschrift = ['neutral', 'name', 'LLM', 'hacking positive', 'hacking negative', 'news', 'error positive', 'error negative', 'tested', 'usability', 'secret positive', 'secret negative', 'government', 'dominion', 'verifiable positive', 'verifiable negative', 'believe', 'detection', 'transparent']
+                beschrift = ['neutral', 'name', 'hacking positive', 'hacking negative', 'news', 'error positive', 'error negative', 'tested', 'usability', 'secret positive', 'secret negative', 'government', 'dominion', 'verifiable positive', 'verifiable negative', 'believe', 'detection', 'transparent']
                 values = list_of_values_codes(categories, second_field, 'codes_open_question')
-            for i in range(len(values)):
-                dd.zeichne_balkendiagramm(values[i], beschrift, listOfTitles[i])
+                print('values len:', len(values))
+            
+                dd.zeichne_balkendiagramm(values, beschrift, listOfTitles[0], labels)
 
         elif age == 1:
             names = ['18-29', '30-39', '40-49', '50-59', '60+']
@@ -702,7 +809,7 @@ try:
             for i in range(len(count)):
                 #print(count[i])
                 #dd.zeichne_balkendiagramm(values[i], beschrift, title[i], 'for Age Groups')
-                dd.zeichne_balkendiagramm(count[i], beschrift, names[i], 'for Age Groups')
+                dd.zeichne_balkendiagramm(count[i], beschrift, names[i], labels, 'for Age Groups')
 
     #title: für Dateinamen zB 'States'
     #listOfGroups: zB ['overall', 'california', 'georgia', 'ohio', 'nevada', 'louisiana']
@@ -734,15 +841,27 @@ try:
         
     # scores: Liste von Werten die berechnet werden sollen
     #   zB ['TVS_Score', 'Machine_Score_1','Overall_Trust','Trust_In_Others','Trust_Technology','Cast_Ballot','Anonymous','Transparency','Reliability','Sys_Security','Usability','Accurately_Counted','Accuracy']
-    # list_groups: liste der Gruppen zb ['overall', 'california', 'georgia', 'ohio', 'nevada', 'louisiana']
     # 
     # verglich: relevant für Filename zB 'States'
     # title: Namen der Scores in einer Form, die ausgeschrieben sind um angezeigt zu werden auf Diagramm
     #   zB ['TVS Score', 'Own Score', 'Overall Trust in the Voting Systems', 'Trust In Others', 'Propensity to Trust in Technology', 'Cast Ballot Reflects Intended Selections', 'Vote is Anonymous', 'System Transparency', 'System Reliability', 'System Security', 'System Usability', 'Votes Are Accurately Counted', 'System Accuracy']
     # age: ist 1 wenn Altersgruppen verglichen werden sollen
     # sec_field: zweites merkmal, falls vorhanden
-    def draw_box_plot(scores, list_groups, vergleich, title, x_axis_names, age=0, sec_field=['']):
-        if age == 0:
+    def draw_box_plot(scores, list_group, vergleich, title, x_axis_names, age=0, sec_field=[''], third_field=''):
+        
+        if third_field != '':
+            for j in sec_field:
+                for i in range(len(scores)):
+                    print(f'Score: {scores[i]}')
+                    values = list_of_values_3_vals(list_group, j, third_field, scores[i])
+                    if scores[i] == 'Machine_Score_1':
+                        dd.draw_boxplot_6(values, vergleich, title[i], x_axis_names, 'Own Score', j, 41, third_field)
+                    elif scores[i] == 'TVS_Score':
+                        dd.draw_boxplot_6(values, vergleich, title[i], x_axis_names, scores[i], j, 105)
+                    else:
+                        dd.draw_boxplot_6(values, vergleich, title[i], x_axis_names, scores[i], j, 5.2, third_field)
+        
+        elif age == 0:
             list_group_cap = x_axis_names
             for j in sec_field:
                 for i in range(len(scores)):
@@ -754,7 +873,7 @@ try:
                         dd.draw_boxplot_6(values, vergleich, title[i], list_group_cap, scores[i], j, 105)
                     else:
                         dd.draw_boxplot_6(values, vergleich, title[i], list_group_cap, scores[i], j)
-        else:
+        elif age == 1:
             list_groups = ['18-29', '30-39', '40-49', '50-59', '60+']
             for j in sec_field:
                 for i in range(len(scores)):
@@ -768,12 +887,35 @@ try:
                     else:
                         dd.draw_boxplot_6(values, vergleich, title[i], list_groups, scores[i], j)
         
+        elif age ==2:
+            age_name = ['18-29', '30-39', '40-49', '50-59', '60+']
+            for j in range(len(age_name)):
+                for i in range(len(scores)):
+                    values = list_of_values_by_age_group(list_group, j+1, scores[i])
+                    if scores[i] == 'Machine_Score_1':
+                        dd.draw_boxplot_6(values, vergleich, title[i], x_axis_names, 'Own Score', age_name[j], 41)
+                    elif scores[i] == 'TVS_Score':
+                        dd.draw_boxplot_6(values, vergleich, title[i], x_axis_names, scores[i], age_name[j], 105)
+                    else:
+                        dd.draw_boxplot_6(values, vergleich, title[i], x_axis_names, scores[i], age_name[j])
+
     # title: 
     # valueList: Liste von Gruppen
-    # age: wenn 1 dann Vergleich von Altersgruppen
-    def draw_stack_trust(title, valueList, namingList, sec_field='', age=0, title_extra=''):
+    # age: wenn 1 dann Vergleich von Altersgruppen, 2 wenn vergleich innerhalb einer Altersgruppe
+    def draw_stack_trust(title, valueList, namingList, sec_field='', age=0, title_extra='', third_field =''):
         #drawStockBar_trust_2_save(title, valueList, namingList, title_extra = '')
-        if age == 0:
+        if third_field != '':
+            values = list_of_values_3_vals(valueList, sec_field, third_field, 'Do_you_trust')
+            if len(valueList) == 2:
+                dd.drawStockBar_trust_2_save(title, values, namingList, title_extra)
+            elif len(valueList) == 3:
+                dd.drawStockBar_trust_3_save(title, values, namingList, title_extra)
+            elif len(valueList) == 5:
+                dd.drawStockBar_trust_5_save(title, values, namingList, title_extra)
+            elif len(valueList) == 6:
+                dd.drawStockBar_trust_6_save(title, values, namingList, title_extra)
+
+        elif age == 0:
             values = list_of_values(valueList, sec_field, 'Do_you_trust')
             if len(valueList) == 2:
                 dd.drawStockBar_trust_2_save(title, values, namingList, title_extra)
@@ -784,21 +926,37 @@ try:
             elif len(valueList) == 6:
                 dd.drawStockBar_trust_6_save(title, values, namingList, title_extra)
             
-        else:
+        elif age == 1:
             namingList = ['18-29', '30-39', '40-49', '50-59', '60+']
             values_of_age = list_of_values_age(['1', '2', '3', '4'], 'Do_you_trust', sec_field)
             values_of_age.append(get_Age_60(sec_field))
             dd.drawStockBar_trust_5_save(title, values_of_age, namingList, title_extra)
-        
+
+        elif age == 2:
+            values = list_of_values_by_age_group(valueList, sec_field, 'Do_you_trust')
+            if len(valueList) == 2:
+                dd.drawStockBar_trust_2_save(title, values, namingList, title_extra)
+            elif len(valueList) == 3:
+                dd.drawStockBar_trust_3_save(title, values, namingList, title_extra)
+            elif len(valueList) == 5:
+                dd.drawStockBar_trust_5_save(title, values, namingList, title_extra)
+            elif len(valueList) == 6:
+                dd.drawStockBar_trust_6_save(title, values, namingList, title_extra)
+
     # groups: liste der Gruppen
     #   zb ['overall', 'california', 'georgia', 'ohio', 'nevada', 'louisiana', 'male', 'female', 'democrat', 'republican', 'independent', 'swing', 'noswing', 'bmd', 'drew']
     # scores: liste der Score
     #   zb ['TVS_Score','Machine_Score_1','Overall_Trust','Trust_In_Others','Trust_Technology','Cast_Ballot','Anonymous','Transparency','Reliability','Sys_Security','Usability','Accurately_Counted','Accuracy']
     # age: wenn 1 dann allw normalverteilungen der Altersgruppen und insgesamt
-    def draw_Normalverteilung(groups, scores, second_field='', age=0):
+    # titles: List of titles for the diagrams
+    # score_name: List of names for the scores, used in the diagram title
+    def draw_Normalverteilung(groups, scores, titles, score_name, second_field='', age=0):
         #todo Normaldist + QQ
         #Sonderfall Age abdecken
+        global stat_value
+        #print('age: ', age)
         if age==1:
+            print('Normalverteilung Age')
             groups = ['18-29', '30-39', '40-49', '50-59', '60+']
             
             for i in scores:
@@ -808,20 +966,22 @@ try:
                 stat_value = i
                 for j in range(len(values_of_age)):
                     if i == 'Machine_Score_1':
-                        print(f'values: {values_of_age[j]}')
                         nd.save_graphs(values_of_age[j], f'{groups[j]}', 'Own Score')
                     else:
-                        print(f'values: {values_of_age[j]}')
                         nd.save_graphs(values_of_age[j], f'Age Group {groups[j]}', i)
         elif age==0:
+            #print('Normalverteilung States')
             for i in scores:
                 stat_value = i
-                for j in groups:
+                for j in range(len(groups)):
                     if i == 'Machine_Score_1':
-                        nd.save_graphs(get_list(j, second_field), f'{j}', 'Own Score')
+                        #print('group: ', groups[j])
+                        nd.save_graphs(get_list(groups[j], second_field), titles[j], score_name[j], 'Own Score')
+                        
                     else:
                         #save_graphs([array_of_values], 'Title_and_name', 'File_name')
-                        nd.save_graphs(get_list(j, second_field), f'{j}', i)
+                        #print('group: ', groups[j])
+                        nd.save_graphs(get_list(groups[j], second_field), titles[j], score_name[j], i)
                     print(f'score: {stat_value}, group: {j}')
         
     
@@ -834,12 +994,12 @@ try:
     # list_1, list_2 ... : liste von den Gruppen die jeweils verglichen werden. list_1[0] vs lsit_2[0] usw.
     #   zB list_1 ['california', 'bmd'] list_2 ['georgia', 'drew']
     # subgroup: liste von zweiter Eigenschaft, falls vorhanden
-    def excel_loops(scores_page, func, list_columns, start_row, list_1, list_2, subgroup=[]):
+    def excel_loops(scores_page, func, list_columns, start_row, list_1, subgroup=[]):
         #todo alle Scores etc hier rein?
         #Sonderfall Age abdecken
         for i in scores_page:
             # Anzahl der list_X Listen jeweils anpassen
-            row_func(list_columns, i[1], start_row, subgroup, list_1, list_2, func, i[0])
+            row_func(list_columns, i[1], start_row, subgroup, list_1, func, i[0])
         return True
 
     score_list = [('TVS_Score', 0),('Machine_Score_1', 1), ('Overall_Trust', 5), ('Trust_In_Others', 6), ('Trust_Technology', 7), ('Cast_Ballot', 8), ('Anonymous', 9), ('Transparency', 10), ('Reliability', 11), ('Sys_Security', 12), ('Usability', 13), ('Accurately_Counted', 14), ('Accuracy', 15)]
@@ -848,8 +1008,17 @@ try:
     list_group = ['overall', 'california', 'georgia', 'ohio', 'nevada', 'louisiana']
     list_group_cap = [x.capitalize() for x in list_group]
     values = list_of_values_codes(list_group, '', 'Factbased_reason')
+    groups = ['california', 'georgia', 'ohio', 'nevada', 'louisiana', 'bmd', 'drew', 'female', 'male', 'democrat', 'republican', 'independent']
+    titles = ['California', 'Georgia', 'Ohio', 'Nevada', 'Louisiana', 'BMD', 'Dre with VVPAT', 'Female', 'Male', 'Democrat', 'Republican', 'Independent']
+    
+    func = normal_dist
+    list_columns = ['X']
+    start_row = 4
+    l1 = ['california', 'georgia', 'ohio', 'nevada', 'louisiana', 'male', 'female', 'democrat', 'republican', 'independent']
 
-    #draw_Normalverteilung(groups, scores, second_field='', age=0)
+    #excel_loops(score_list, func, list_columns, start_row, l1)
+
+    #draw_Normalverteilung(groups, scores, titles, scoreName, second_field='', age=0)
     #draw_stack_trust(title, valueList, namingList, sec_field='', age=0, title_extra='')
     #draw_box_plot(scores, list_groups, vergleich, title, age=0, sec_field='')
     #draw_stack_bar_fact(title, listOfGroups, list_groups, age=0, factVSfeeling=0, second='')
@@ -858,12 +1027,29 @@ try:
     #list_group = ['democrat', 'republican', 'independent']
     #list_group_cap = ['Democrats', 'Republicans', 'Independent']
     #list_of_values(valueList, sec_field, 'Do_you_trust')
-
-    title= ['machine_dem', 'machine_rep', 'machine_ind', 'machine_male', 'machine_female']
-    listOfGroups = ['swing', 'noswing']
-    sec_f = ['democrat', 'republican', 'independent', 'male', 'female']
-    sec = ['(only democrat)', '(only republican)', '(only independent)', '(only male)', '(only female)']
-    draw_stack_trust('machine', ['bmd', 'drew', 'louisiana'], ['BMD', 'DRE /w VVPAT', 'DRE /wo VVPAT'], '', 0, '')
+    scores = ['TVS_Score', 'Machine_Score_1','Overall_Trust','Trust_In_Others','Trust_Technology','Cast_Ballot','Anonymous','Transparency','Reliability','Sys_Security','Usability','Accurately_Counted','Accuracy']
+    title = ['TVS Score', 'Machine based Score', 'Overall Trust in the Voting Systems', 'Trust In Others', 'Propensity to Trust in Technology', 'Cast Ballot Reflects Intended Selections', 'Vote is Anonymous', 'System Transparency', 'System Reliability', 'System Security', 'System Usability', 'Votes Are Accurately Counted', 'System Accuracy']
+    #names = ['18-29', '30-39', '40-49', '50-59', '60+']
+    #values = ['bmd', 'drew', 'louisiana']
+    #name_axis = ['BMD', 'DRE/w VVPAT', 'DRE/wo VVPAT']
+    #values = ['swing', 'noswing']
+    #name_axis = ['Swing', 'No Swing']
+    valuesList = [['california', 'ohio', 'louisiana']]
+    name_axis_list = [['BMD\n(NSS)', 'DRE\nwith VVPAT\n(NSS)', 'DRE without\nVVPAT\n(NSS)']]
+    vergleich_list = ['Non Swing Maschines'] #name des files
+    #sec_field = ['male', 'female']
+    #third_field = ['democrat', 'republican', 'independent']
+    for j in range(len(valuesList)):
+        draw_box_plot(scores, valuesList[j], vergleich_list[j], title, name_axis_list[j], age=0)
+    
+    names = ['BMD', 'DRE with VVPAT']
+    #draw_histo_coding(['BMD in California and Georgia'], ['california', 'georgia'], 1, ['California (NSS)', 'Georgia (SS)'])
+    #draw_histo_coding(['DRE with VVPAT in Ohio and Nevada'], ['ohio', 'nevada'], 1, ['Ohio (NSS)', 'Nevada (SS)'])
+    #for i in range(len(names)):
+        
+        #draw_stack_bar_fact(names[i], valuesList[i], name_axis_list[i], age=0, factVSfeeling=0)
+        #draw_stack_bar_fact(names[i], valuesList[i], name_axis_list[i], age=0, factVSfeeling=1)
+        #draw_stack_trust(names[i], valuesList[i], name_axis_list[i])
 
 finally:
     connection.close()

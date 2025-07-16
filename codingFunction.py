@@ -48,7 +48,6 @@ def coding_count_list(listCodes):
     
     neutral = codes.count('neutral')
     name = codes.count('name')
-    llm = codes.count('LLM')
     hacking_pos = codes.count('hacking_pos')
     hacking_neg = codes.count('hacking_neg')
     news = codes.count('news')
@@ -65,9 +64,9 @@ def coding_count_list(listCodes):
     believe = codes.count('believe')
     detection = codes.count('detection')
     transparent = codes.count('transparent')
-    rest = len(codes) - neutral - name - llm - hacking_pos - hacking_neg - news - error_pos - error_neg - tested - usability - secret_pos - secret_neg - government - dominion - verifiable_pos - verifiable_neg - believe - detection - transparent
+    rest = len(codes) - neutral - name - hacking_pos - hacking_neg - news - error_pos - error_neg - tested - usability - secret_pos - secret_neg - government - dominion - verifiable_pos - verifiable_neg - believe - detection - transparent
 
-    all_val = [neutral, name, llm, hacking_pos, hacking_neg, news, error_pos, error_neg, tested, usability, secret_pos, secret_neg, government, dominion, verifiable_pos, verifiable_neg, believe, detection, transparent]
+    all_val = [neutral, name, hacking_pos, hacking_neg, news, error_pos, error_neg, tested, usability, secret_pos, secret_neg, government, dominion, verifiable_pos, verifiable_neg, believe, detection, transparent]
     return_list = [(x/total)*100 for x in all_val]
         
 

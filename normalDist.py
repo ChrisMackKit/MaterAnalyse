@@ -51,29 +51,29 @@ def normal_distribution_analysis(ova_score, hist_title):
     plt.show()
     return shapiro, ks_test
 
-def save_graphs(values, hist_title, file_path):
+def save_graphs(values, hist_title, score_type, file_path):
     file_path = f'G:\\Meine Ablage\\Masterthese\\Data Visualisierung\\Normalverteilung\\{file_path}'
 
     plt.figure()
     plt.hist(values, bins=30, density=True, alpha=0.6, color='g')
 
     # Normale Verteilungskurve zum Vergleich hinzufügen
-    mu, std = np.mean(values), np.std(values)
     print(f'values: {values}')
+    mu, std = np.mean(values), np.std(values)
     x = np.linspace(min(values), max(values), 100)
     plt.plot(x, stats.norm.pdf(x, mu, std), 'k', linewidth=2)
 
-    plt.title(hist_title)
+    plt.title(f'Normal Distribution for {hist_title} based on {score_type}')
     plt.xlabel('Values')
     plt.ylabel('Density')
-    plt.savefig(f"{file_path}\\histogram_{hist_title}.png", dpi=300, bbox_inches='tight')
+    plt.savefig(f"{file_path}\\histogram_{hist_title}_{score_type}.png", dpi=300, bbox_inches='tight')
     #plt.show()
     plt.close()
 
     plt.figure()
     sm.qqplot(values, line='s')
-    plt.title(hist_title)
-    plt.savefig(f"{file_path}\\qq_{hist_title}.png", dpi=300, bbox_inches='tight')
+    plt.title(f'Q-Q Plot for {hist_title} based on {score_type}')
+    plt.savefig(f"{file_path}\\qq_{hist_title}_{score_type}.png", dpi=300, bbox_inches='tight')
     #plt.show()
     plt.close()
 
